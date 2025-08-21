@@ -64,6 +64,12 @@ class LorenzoDM extends Theme
         
         // Aggiunge CSS principale del tema
         $this->grav['assets']->addCss('theme://css/custom.css', ['priority' => 90]);
+
+        // Aggiunge CSS per il cookie popup
+        $this->grav['assets']->addCss('theme://css/cookie-popup.css', 90);
+
+        // Aggiunge JavaScript per il cookie popup  
+        $this->grav['assets']->addJs('theme://js/cookie-popup.js', ['group' => 'bottom']);
         
         // Aggiunge CSS per fix spazi bianchi
         $this->grav['assets']->addCss('theme://css/fix-whitespace.css', ['priority' => 95]);
@@ -100,7 +106,8 @@ class LorenzoDM extends Theme
         // Aggiunge JavaScript per l'infinite scroll (solo per le pagine non AJAX)
         if (!$this->isAjaxRequest()) {
             $this->grav['assets']->addJs('theme://js/infinite-scroll.js', ['group' => 'bottom']);
-}
+        }
+        
     }
     
     /**
