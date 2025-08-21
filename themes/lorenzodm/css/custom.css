@@ -1,0 +1,1270 @@
+/* File: user/themes/lorenzodm/css/custom.css */
+
+/* Importazione del font Montserrat Black 900 */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;900&display=swap');
+
+/* ==========================================
+   VARIABILI TEMA - SUPPORTO TEMA CHIARO/SCURO 
+   ========================================== */
+
+/* Tema chiaro (default) */
+:root {
+    --primary-font: 'Montserrat', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --primary-color: #004aad;
+    --secondary-color: #00be62;
+    --accent-color: #fe5656;
+    --bg-color: #fefefe;
+    --text-color: #212529;
+    --card-bg: #ffffff;
+    --card-header-bg: #004aad;
+    --card-header-color: #ffffff;
+    --card-border: rgba(0,0,0,0.08);
+    --card-shadow: rgba(0,0,0,0.05);
+    --card-hover-shadow: rgba(0,0,0,0.12);
+    --header-shadow: rgba(0,0,0,0.15);
+    --hover-shadow: rgba(0,0,0,0.1);
+    --footer-bg: #004aad;
+    --footer-text: #ffffff;
+    --sidebar-card-bg: #ffffff;
+    --sidebar-header-bg: #00be62;
+    --sidebar-header-color: #ffffff;
+    --page-header-bg: #004aad;
+    --page-header-color: #ffffff;
+    --form-bg: #ffffff;
+    --form-border: rgba(0,0,0,0.1);
+    --input-bg: #ffffff;
+    --input-border: rgba(0,0,0,0.15);
+    --input-focus-border: #004aad;
+    --link-color: #004aad;
+    --link-hover-color: #fe5656;
+    --badge-bg: #00be62;
+    --badge-color: #ffffff;
+}
+
+/* Tema scuro */
+[data-theme="dark"] {
+    --primary-font: 'Montserrat', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --primary-color: #00a0ff;
+    --secondary-color: #00e070;
+    --accent-color: #ff6b6b;
+    --bg-color: #121212;
+    --text-color: #e0e0e0;
+    --card-bg: #1e1e1e; 
+    --card-header-bg: #00a0ff;
+    --card-header-color: #ffffff;
+    --card-border: rgba(255,255,255,0.05);
+    --card-shadow: rgba(0,0,0,0.2);
+    --card-hover-shadow: rgba(255,255,255,0.08);
+    --header-shadow: rgba(0,0,0,0.3);
+    --hover-shadow: rgba(0,0,0,0.3);
+    --footer-bg: #001c41;
+    --footer-text: #ffffff;
+    --sidebar-card-bg: #1e1e1e;
+    --sidebar-header-bg: #00e070;
+    --sidebar-header-color: #ffffff;
+    --page-header-bg: #001c41;
+    --page-header-color: #ffffff;
+    --form-bg: #1e1e1e;
+    --form-border: rgba(255,255,255,0.1);
+    --input-bg: #2a2a2a;
+    --input-border: rgba(255,255,255,0.15);
+    --input-focus-border: #00a0ff;
+    --link-color: #00a0ff;
+    --link-hover-color: #ff6b6b;
+    --badge-bg: #00e070;
+    --badge-color: #ffffff;
+}
+
+/* ==========================================
+   STILI BASE
+   ========================================== */
+
+/* Reset margin superiore per eliminare la striscia bianca */
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    width: 100%;
+    font-family: var(--primary-font);
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+    padding-top: 56px; /* Spazio per il navbar fisso */
+    line-height: 1.6;
+}
+
+/* Applicazione del font Montserrat a tutti gli elementi principali */
+h1, h2, h3, h4, h5, h6, p, a, span, div, button, input, select, textarea, .navbar-brand, .nav-link, .btn {
+    font-family: var(--primary-font);
+}
+
+/* Impostazione del peso Black 900 per titoli principali */
+h1, .page-title, .magazine-title, .section-title, .article-title, .navbar-brand {
+    font-weight: 900;
+}
+
+a {
+    color: var(--link-color);
+    transition: color 0.2s ease, transform 0.2s ease;
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--link-hover-color);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+/* ==========================================
+   HEADER PAGINA
+   ========================================== */
+
+.page-header {
+    background-color: var(--page-header-bg);
+    color: var(--page-header-color);
+    padding: 3rem 0;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 3px 15px var(--header-shadow);
+}
+
+.page-header::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 10px;
+    background: var(--accent-color);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 0);
+}
+
+.page-title {
+    color: var(--page-header-color);
+    font-size: 2.5rem;
+    font-weight: 900;
+    margin-bottom: 0.5rem;
+    position: relative;
+}
+
+.page-subtitle {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.2rem;
+    margin-bottom: 0;
+}
+
+/* ==========================================
+   NAVIGAZIONE
+   ========================================== */
+
+.navbar {
+    background-color: var(--primary-color);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 1000;
+    box-shadow: 0 2px 15px var(--header-shadow);
+    transition: background-color 0.3s ease;
+    margin: 0; /* Elimina margini */
+    border: none; /* Elimina bordi */
+    padding: 0.5rem 1rem;
+}
+
+.navbar-brand, .nav-link {
+    color: #ffffff !important;
+}
+
+.navbar-brand {
+    font-weight: 900;
+    font-size: 1.3rem;
+    padding: 0.5rem 0;
+}
+
+.navbar-logo {
+    height: 32px;
+    width: auto;
+}
+
+.nav-link {
+    font-weight: 500;
+    padding: 0.5rem 1rem !important;
+    border-radius: 4px;
+    margin: 0 2px;
+    transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+    color: var(--accent-color) !important;
+    background-color: rgba(255,255,255,0.1);
+}
+
+.nav-link.active {
+    background-color: rgba(255,255,255,0.15);
+}
+
+.navbar-toggler {
+    border-color: rgba(255,255,255,0.3);
+}
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(255, 255, 255, 0.9)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+
+.navbar-subscribe-btn {
+    white-space: nowrap;
+    font-weight: 600;
+    padding: 0.4rem 0.8rem;
+    transition: all 0.2s ease;
+}
+
+.navbar-subscribe-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* ==========================================
+   CARD ARTICOLI/PROGETTI
+   ========================================== */
+
+.content-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px var(--card-shadow);
+    height: 100%;
+    position: relative;
+}
+
+.content-card:hover .btn-primary:not(:hover){
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px var(--card-hover-shadow);
+}
+
+.content-card .card-img-top {
+    transition: transform 0.5s ease;
+    height: 100%;
+    object-fit: cover;
+}
+
+.content-card:hover .card-img-top {
+    transform: scale(1.05);
+}
+
+.content-card .card-body {
+    padding: 1.25rem;
+}
+
+.card-header-custom {
+    margin: -1.25rem -1.25rem 1rem -1.25rem;
+    padding: 0.75rem 1.25rem;
+    background-color: var(--card-header-bg);
+    border-bottom: 1px solid var(--card-border);
+}
+
+.content-card .card-title {
+    color: var(--card-header-color);
+    font-weight: 900;
+    margin-bottom: 0;
+}
+
+.card-footer-custom {
+    padding-top: 1rem;
+    border-top: 1px solid var(--card-border);
+}
+
+.sidebar-card {
+    background-color: var(--sidebar-card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px var(--card-shadow);
+    margin-bottom: 20px;
+}
+
+.sidebar-card .card-header {
+    background-color: var(--sidebar-header-bg);
+    color: var(--sidebar-header-color);
+    font-weight: 700;
+}
+
+.sidebar-item {
+    transition: all 0.2s ease;
+    background-color: var(--sidebar-card-bg);
+}
+
+.sidebar-item:hover {
+    background-color: rgba(0, 0, 0, 0.03);
+}
+
+.sidebar-item a {
+    color: var(--link-color);
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.sidebar-item a:hover {
+    color: var(--link-hover-color);
+    transform: translateX(3px);
+    display: inline-block;
+}
+
+/* ==========================================
+   PARTNERSHIP E FEATURE CARDS
+   ========================================== */
+
+.partnership-section {
+    padding: 2rem 0;
+}
+
+.partnership-card {
+    height: 240px;
+    background-color: var(--secondary-color);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 1.3rem;
+    transition: all 0.4s ease;
+    cursor: pointer;
+    box-shadow: 0 8px 20px var(--card-shadow);
+    overflow: hidden;
+    position: relative;
+}
+
+.partnership-card:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.2) 100%);
+    z-index: 1;
+}
+
+.partnership-description {
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    opacity: 0.9;
+}
+
+.feature-card-link {
+    display: block;
+    text-decoration: none;
+    color: white;
+}
+
+.feature-card {
+    height: 240px;
+    background-color: var(--secondary-color);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 1.3rem;
+    transition: all 0.4s ease;
+    cursor: pointer;
+    box-shadow: 0 8px 20px var(--card-shadow);
+    overflow: hidden;
+    position: relative;
+}
+
+.feature-card:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.2) 100%);
+    z-index: 1;
+}
+
+.feature-card-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 20px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.feature-logo {
+    width: 140px;
+    height: 140px;
+    object-fit: contain;
+    margin-bottom: 15px;
+    transition: all 0.3s ease;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));
+}
+
+.feature-card h3 {
+    margin-top: auto;
+    margin-bottom: 10px;
+    font-weight: 900;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    color: white;
+}
+
+.feature-card:hover {
+    transform: translateY(-10px) scale(1.03);
+    box-shadow: 0 15px 30px var(--hover-shadow);
+}
+
+.feature-card:hover .feature-logo {
+    transform: scale(1.1);
+}
+
+/* Collaborazioni */
+.collaboration-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px var(--card-shadow);
+    height: 100%;
+}
+
+.collaboration-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px var(--card-hover-shadow);
+}
+
+.collaboration-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: all 0.5s ease;
+}
+
+.collaboration-card:hover .collaboration-img {
+    transform: scale(1.05);
+}
+
+/* ==========================================
+   BOTTONI
+   ========================================== */
+
+.btn {
+    border-radius: 5px;
+    padding: 0.5rem 1.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.btn-donazione {
+    background-color: var(--accent-color) !important;
+    border-color: var(--accent-color) !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-primary:hover {
+    background-color: #003d91;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+}
+
+.btn-donazione:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px var(--hover-shadow);
+}
+
+.btn-secondary {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+.btn-accent {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: white;
+}
+
+.btn-accent:hover {
+    background-color: #e04848;
+    color: white;
+}
+
+/* ==========================================
+   BANNER E CALL TO ACTION
+   ========================================== */
+
+.banner-container {
+    position: relative;
+    width: 100%;
+    height: 600px;      /* ← altezza visibile dopo il ritaglio: 
+                            (altezza originale immagine − 200px superiore − 200px inferiore) */
+    overflow: hidden;   /* nasconde tutto ciò che sporge */
+    margin: 0;
+    padding: 0;
+}
+
+.banner-image {
+    position: absolute;
+    top: -200px;        /* sposta verso l'alto i primi 200px (ritaglio superiore) */
+    left: 0;
+    width: 100%;
+    height: auto;
+    transform: scale(1.5);          /* mantiene lo zoom */
+    transform-origin: center center;
+    transition: transform 10s ease;
+}
+
+.banner-container:hover .banner-image {
+    transform: scale(1.05);
+}
+
+.subscribe-button-container {
+    position: absolute;
+    bottom: 170px !important; /* Posizione modificata come richiesto */
+    left: 0;
+    right: 0;
+    text-align: center;
+    z-index: 10;
+}
+
+.subscribe-button {
+    background-color: var(--accent-color);
+    color: white;
+    text-transform: uppercase;
+    font-weight: 900;
+    padding: 18px 40px !important; /* Padding aumentato */
+    font-size: 2rem !important; /* Dimensione testo aumentata */
+    display: inline-block;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border-radius: 10px !important; /* Bordo più arrotondato */
+    box-shadow: 0 4px 20px rgba(0,0,0,0.8) !important; /* Ombra più pronunciata */
+    border: 4px solid white !important; /* Bordo più spesso */
+    letter-spacing: 2px !important;
+    transform: scale(1.6); /* Scala complessiva */
+}
+
+.subscribe-button:hover {
+    background-color: #ff4141;
+    transform: translateY(-5px) scale(1.25) !important; /* Effetto hover più pronunciato */
+    box-shadow: 0 8px 25px rgba(0,0,0,0.6) !important;
+    color: white;
+    text-decoration: none;
+}
+
+/* ==========================================
+   SEZIONE MAGAZINE
+   ========================================== */
+
+.magazine-section {
+    padding: 60px 0;
+    background-color: var(--bg-color);
+    margin: 0; /* Elimina margini */
+}
+
+.magazine-title {
+    color: var(--primary-color);
+    font-size: 2.8rem;
+    font-weight: 900;
+    margin-bottom: 20px;
+    position: relative;
+    display: inline-block;
+}
+
+.magazine-title:after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 60px;
+    height: 4px;
+    background-color: var(--accent-color);
+    border-radius: 2px;
+}
+
+.magazine-text {
+    margin-bottom: 30px;
+}
+
+/* ==========================================
+   VIDEO CONTAINER
+   ========================================== */
+
+.video-wrapper {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+    overflow: hidden;
+    max-width: 100%;
+    margin-bottom: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px var(--card-shadow);
+}
+
+.video-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+}
+
+/* ==========================================
+   DISCOVER SECTION
+   ========================================== */
+
+.discover-section {
+    padding: 70px 0;
+    background-color: var(--bg-color);
+    text-align: center;
+    box-shadow: 0 -5px 15px var(--card-shadow), 0 5px 15px var(--card-shadow);
+}
+
+.section-title {
+    color: var(--primary-color);
+    font-size: 2.2rem;
+    font-weight: 900;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+/* ==========================================
+   SEZIONE DONAZIONI
+   ========================================== */
+
+.donate-section {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 70px 0;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 -10px 30px var(--card-shadow);
+}
+
+.donate-text {
+    font-size: 1.4rem;
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    font-weight: 700;
+}
+
+.italian-flag {
+    display: flex;
+    max-width: 320px;
+    height: 120px;
+    margin: 30px auto;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.flag-stripe {
+    flex: 1;
+    height: 100%;
+}
+
+.flag-red {
+    background-color: #F44336;
+}
+
+.flag-white {
+    background-color: white;
+}
+
+.flag-green {
+    background-color: #4CAF50;
+}
+
+.donate-button {
+    background: linear-gradient(to right, var(--accent-color), #4CAF50);
+    color: white;
+    padding: 14px 50px;
+    border-radius: 30px;
+    font-size: 1.5rem;
+    font-weight: 900;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+    margin-top: 30px;
+    position: relative;
+    z-index: 2;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+
+.donate-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+    color: white;
+    text-decoration: none;
+}
+
+/* ==========================================
+   FOOTER
+   ========================================== */
+
+.footer {
+    background-color: var(--footer-bg);
+    color: var(--footer-text);
+    padding: 50px 0 30px;
+    margin-top: 0;
+}
+
+.footer h5 {
+    font-weight: 900;
+    margin-bottom: 20px;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 8px;
+}
+
+.footer h5:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 40px;
+    height: 3px;
+    background-color: var(--accent-color);
+    border-radius: 1.5px;
+}
+
+.footer a {
+    color: var(--footer-text);
+    transition: all 0.2s ease;
+}
+
+.footer a:hover {
+    opacity: 0.8;
+    transform: translateX(3px);
+    text-decoration: none;
+}
+
+.social-icons a {
+    margin-right: 15px;
+    font-size: 1.5rem;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.social-icons a:hover {
+    transform: translateY(-3px);
+    opacity: 1;
+}
+
+/* ==========================================
+   TEMA CHIARO/SCURO
+   ========================================== */
+
+.theme-switch-wrapper {
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin-left: 10px;
+}
+
+.theme-switch {
+    display: inline-block;
+    height: 34px;
+    position: relative;
+    width: 60px;
+}
+
+.theme-switch input {
+    display: none;
+}
+
+.theme-text {
+    position: relative;
+    margin-left: 10px;
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.slider {
+    background-color: rgba(255, 255, 255, 0.3);
+    bottom: 0;
+    cursor: pointer;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: .4s;
+    border: 2px solid white;
+}
+
+.slider:before {
+    background-color: var(--accent-color);
+    bottom: 4px;
+    content: "";
+    height: 24px;
+    left: 4px;
+    position: absolute;
+    transition: .4s;
+    width: 24px;
+}
+
+input:checked + .slider {
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 2px solid white;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+    background-color: var(--primary-color);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* ==========================================
+   ARTICOLI SINGOLI
+   ========================================== */
+
+.article-header {
+    margin-bottom: 2rem;
+}
+
+.article-title {
+    color: var(--primary-color);
+    font-size: 2.5rem;
+    font-weight: 900;
+    margin-bottom: 0.5rem;
+}
+
+.article-meta {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.article-featured-image {
+    margin-bottom: 1.5rem;
+}
+
+.article-content {
+    line-height: 1.7;
+}
+
+.article-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin: 1.5rem 0;
+}
+
+.article-content h2 {
+    color: var(--primary-color);
+    margin-top: 2rem;
+    font-weight: 800;
+}
+
+.article-content h3 {
+    color: var(--secondary-color);
+    margin-top: 1.5rem;
+    font-weight: 700;
+}
+
+.article-content blockquote {
+    border-left: 4px solid var(--accent-color);
+    padding-left: 1rem;
+    margin-left: 0;
+    font-style: italic;
+    color: #666;
+}
+
+.article-tags {
+    margin-bottom: 1.5rem;
+}
+
+.article-sharing {
+    margin-top: 2rem;
+}
+
+.article-sharing a {
+    color: var(--primary-color);
+    transition: all 0.2s ease;
+}
+
+.article-sharing a:hover {
+    transform: translateY(-3px);
+    opacity: 0.8;
+}
+
+/* ==========================================
+   ANIMAZIONI
+   ========================================== */
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ==========================================
+   FORM DI CONTATTO
+   ========================================== */
+
+.contact-partners-section {
+    background-color: var(--bg-color);
+    border-top: 1px solid var(--card-border);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-control {
+    background-color: var(--input-bg);
+    border: 1px solid var(--input-border);
+    color: var(--text-color);
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: var(--input-focus-border);
+    box-shadow: 0 0 0 0.2rem rgba(0, 74, 173, 0.25);
+    background-color: var(--input-bg);
+    color: var(--text-color);
+}
+
+/* ==========================================
+   ACCESSIBILITÀ
+   ========================================== */
+
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--accent-color);
+    color: white;
+    padding: 8px;
+    z-index: 1001;
+    transition: top 0.3s;
+}
+
+.skip-link:focus {
+    top: 0;
+}
+
+/* ==========================================
+   RESPONSIVE
+   ========================================== */
+
+@media (max-width: 991px) {
+    .navbar-nav {
+        padding: 15px 0;
+    }
+    
+    .nav-link {
+        padding: 10px;
+        margin: 5px 0;
+    }
+    
+    .page-title {
+        font-size: 2rem;
+    }
+    
+    .partnership-card,
+    .feature-card {
+        height: 200px;
+    }
+
+    .feature-logo {
+        width: 100px;
+        height: 100px;
+    }
+
+    .magazine-title {
+        font-size: 2.2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .subscribe-button-container {
+        bottom: 20px;
+    }
+    
+    .subscribe-button {
+        font-size: 1.2rem;
+        padding: 10px 20px;
+    }
+    
+    .magazine-title {
+        font-size: 2rem;
+    }
+    
+    .feature-card,
+    .partnership-card {
+        height: 180px;
+    }
+    
+    .feature-logo {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .donate-text {
+        font-size: 1.2rem;
+    }
+    
+    .donate-button {
+        padding: 12px 30px;
+        font-size: 1.3rem;
+    }
+    
+    .article-title {
+        font-size: 2rem;
+    }
+
+    .card-header-custom {
+        padding: 0.5rem 1rem;
+    }
+
+    .content-card .card-title {
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .page-header {
+        padding: 2rem 0;
+    }
+
+    .page-title {
+        font-size: 1.8rem;
+    }
+
+    .subscribe-button {
+        font-size: 1rem;
+        padding: 8px 16px;
+        border-width: 2px;
+    }
+
+    .feature-card,
+    .partnership-card {
+        height: 150px;
+    }
+
+    .feature-logo {
+        width: 60px;
+        height: 60px;
+        margin-bottom: 10px;
+    }
+
+    .feature-card h3 {
+        font-size: 1.1rem;
+    }
+
+    .section-title {
+        font-size: 1.8rem;
+    }
+
+    .donate-button {
+        font-size: 1.1rem;
+        padding: 10px 24px;
+    }
+
+    .italian-flag {
+        height: 80px;
+        max-width: 240px;
+    }
+
+    .theme-text {
+        display: none;
+    }
+}
+
+/* ==========================================
+   SOLUZIONE DEFINITIVA PER I PULSANTI DONAZIONE 
+   ========================================== */
+
+/* Stile base comune per tutti i pulsanti di donazione */
+.btn-donation {
+    border: 2px solid;
+    font-weight: 700;
+    padding: 8px 20px;
+    border-radius: 5px;
+    color: white !important;
+    text-decoration: none !important;
+    display: inline-block;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.btn-donation:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+    color: white !important;
+    text-decoration: none !important;
+}
+
+/* Pulsante PayPal (rosso - accent) */
+.btn-donation-accent {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+.btn-donation-accent:hover {
+    background-color: #e04848;
+    border-color: #e04848;
+}
+
+/* Pulsante Bonifico (blu - primary) */
+.btn-donation-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-donation-primary:hover {
+    background-color: #003d91;
+    border-color: #003d91;
+}
+
+/* Pulsante Altre modalità (verde - secondary) */
+.btn-donation-secondary {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+.btn-donation-secondary:hover {
+    background-color: #00a953;
+    border-color: #00a953;
+}
+
+/* Pulsante "Dona ora" nella card Supportaci (SEMPRE ROSSO) */
+.supportaci-btn {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: white !important;
+    text-decoration: none !important;
+    border-radius: 5px;
+    padding: 8px 20px;
+    margin-top: 10px;
+    font-weight: 700;
+    display: inline-block;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    border: 2px solid var(--accent-color);
+}
+
+.supportaci-btn:hover {
+    background-color: #e04848;
+    border-color: #e04848;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+    color: white !important;
+    text-decoration: none !important;
+}
+
+/* Pulsante grande con bandiera italiana */
+.main-donate-button {
+    background-color: var(--accent-color);
+    border: 2px solid rgba(255,255,255,0.6);
+    color: white !important;
+    padding: 14px 50px;
+    border-radius: 30px;
+    font-size: 1.5rem;
+    font-weight: 900;
+    text-decoration: none !important;
+    display: inline-block;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-top: 30px;
+    position: relative;
+    z-index: 2;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    text-align: center;
+}
+
+.main-donate-button:hover {
+    background-color: #e04848;
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+    color: white !important;
+    text-decoration: none !important;
+}
+
+/* FIX aggiuntivi per evitare problemi di visualizzazione */
+.container, .container-fluid {
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
+/* Fix per problemi di visualizzazione in dispositivi mobili */
+@media (max-width: 576px) {
+    body {
+        padding-top: 56px;
+    }
+    
+    .banner-container {
+        height: 400px;
+    }
+    
+    .banner-image {
+        top: -100px;
+    }
+    
+    .subscribe-button {
+        transform: scale(1);
+        border-width: 2px !important;
+    }
+    
+    .subscribe-button:hover {
+        transform: translateY(-3px) scale(1.05) !important;
+    }
+}

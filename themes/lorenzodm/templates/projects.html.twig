@@ -1,0 +1,219 @@
+{# File: user/themes/lorenzodm/templates/projects.html.twig #}
+{% extends 'partials/base.html.twig' %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <h1 class="page-title">{{ page.title }}</h1>
+        {% if page.header.subtitle %}
+            <p class="page-subtitle">{{ page.header.subtitle }}</p>
+        {% endif %}
+    </div>
+</div>
+
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-8">
+            {% if page.content %}
+                <div class="page-content mb-5">
+                    {{ page.content|raw }}
+                </div>
+            {% endif %}
+            
+            <div class="projects-grid">
+                {% if config.plugins.pagination.enabled %}
+                    {% set collection = page.collection() %}
+                    {% set limit = config.plugins.pagination.limit %}
+                {% else %}
+                    {% set collection = page.collection() %}
+                    {% set limit = 10 %}
+                {% endif %}
+                
+                {% if collection|length > 0 %}
+                    {% for project in collection %}
+                        <article class="card content-card mb-4 fade-in">
+                            <div class="row g-0">
+                                <div class="col-md-4">
+                                    {% if project.header.image and (project.header.image|first != '/') %}
+                                        {% if theme_var('default_project_image') %}
+                                            {% set default_image = theme_var('default_project_image') %}
+                                        {% else %}
+                                            {% set default_image = 'default-project.jpg' %}
+                                        {% endif %}
+                                        
+                                        {% if project.media.images|length > 0 %}
+                                            {% set project_image = project.media.images|first %}
+                                            <img src="{{ project_image.url }}" 
+                                                 class="card-img-top h-100 object-fit-cover" 
+                                                 alt="{{ project.title }}" 
+                                                 loading="lazy">
+                                        {% elseif (theme_url ~ '/images/' ~ project.header.image)|exists %}
+                                            <img src="{{ url('theme://images/' ~ project.header.image) }}" 
+                                                 class="card-img-top h-100 object-fit-cover" 
+                                                 alt="{{ project.title }}" 
+                                                 loading="lazy">
+                                        {% else %}
+                                            <img src="{{ url('theme://images/' ~ default_image) }}" 
+                                                 class="card-img-top h-100 object-fit-cover" 
+                                                 alt="{{ project.title }}" 
+                                                 loading="lazy">
+                                        {% endif %}
+                                    {% else %}
+                                        {% if theme_var('default_project_image') %}
+                                            {% set default_image = theme_var('default_project_image') %}
+                                        {% else %}
+                                            {% set default_image = 'default-project.jpg' %}
+                                        {% endif %}
+                                        
+                                        <img src="{{ url('theme://images/' ~ default_image) }}" 
+                                             class="card-img-top h-100 object-fit-cover" 
+                                             alt="{{ project.title }}" 
+                                             loading="lazy">
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body d-flex flex-column h-100">
+                                        <div class="card-header-custom">
+                                            <h2 class="card-title h4">{{ project.title }}</h2>
+                                        </div>
+                                        
+                                        {% if project.header.date %}
+                                            <p class="card-subtitle text-muted small mb-2">
+                                                <i class="far fa-calendar-alt me-1"></i> {{ project.header.date|date("d/m/Y") }}
+                                            </p>
+                                        {% endif %}
+                                        
+                                        {% if project.header.status %}
+                                            <p class="card-subtitle mb-2">
+                                                <span class="badge {% if project.header.status == 'Completato' %}bg-success{% elseif project.header.status == 'In corso' %}bg-warning text-dark{% else %}bg-info{% endif %}">
+                                                    {{ project.header.status }}
+                                                </span>
+                                            </p>
+                                        {% endif %}
+                                        
+                                        <p class="card-text flex-grow-1">
+                                            {% if project.header.summary %}
+                                                {{ project.header.summary|striptags }}
+                                            {% else %}
+                                                {{ project.summary|striptags|truncate(500) }}
+                                            {% endif %}
+                                        </p>
+                                        
+                                        <div class="card-footer-custom mt-auto">
+                                            <a href="{{ project.url }}" class="btn btn-primary stretched-link">Visualizza progetto</a>
+                                            
+                                            {% if project.taxonomy.tag %}
+                                                <div class="mt-2">
+                                                    {% for tag in project.taxonomy.tag %}
+                                                        <span class="badge bg-secondary me-1">{{ tag }}</span>
+                                                    {% endfor %}
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    {% endfor %}
+                    
+                    {% if config.plugins.pagination.enabled and collection.params.pagination %}
+                        {% include 'partials/pagination.html.twig' with {'base_url': page.url, 'pagination': collection.params.pagination} %}
+                    {% endif %}
+                {% else %}
+                    <div class="alert alert-info">
+                        <p>Nessun progetto disponibile al momento.</p>
+                        <p>Aggiungi dei progetti nella cartella <code>user/pages/03.progetti/</code> per visualizzarli qui.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="sidebar">
+                <!-- Ricerca -->
+                {% if config.plugins.simplesearch.enabled %}
+                    <div class="card sidebar-card mb-4">
+                        <div class="card-header">
+                            <h3 class="h5 mb-0">Cerca</h3>
+                        </div>
+                        <div class="card-body">
+                            {% include 'partials/simplesearch_searchbox.html.twig' %}
+                        </div>
+                    </div>
+                {% endif %}
+                
+                <!-- Ultimi progetti -->
+                <div class="card sidebar-card mb-4">
+                    <div class="card-header">
+                        <h3 class="h5 mb-0">Ultimi Progetti</h3>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        {% set recent_projects = page.collection.order('date', 'desc').slice(0, 5) %}
+                        {% if recent_projects|length > 0 %}
+                            {% for item in recent_projects %}
+                                <li class="list-group-item sidebar-item">
+                                    <a href="{{ item.url }}" class="d-block text-truncate">{{ item.title }}</a>
+                                    {% if item.header.date %}
+                                        <div class="small text-muted">{{ item.header.date|date("d/m/Y") }}</div>
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        {% else %}
+                            <li class="list-group-item">Nessun progetto disponibile</li>
+                        {% endif %}
+                    </ul>
+                </div>
+                
+                <!-- Tag popolari -->
+                {% if config.plugins.taxonomylist.enabled %}
+                    <div class="card sidebar-card mb-4">
+                        <div class="card-header">
+                            <h3 class="h5 mb-0">Tag popolari</h3>
+                        </div>
+                        <div class="card-body">
+                            {% include 'partials/taxonomylist.html.twig' with {'taxonomy': 'tag'} %}
+                        </div>
+                    </div>
+                {% endif %}
+                
+                <!-- Supportaci -->
+                <div class="card sidebar-card">
+                    <div class="card-header supportaci-header">
+                        Supportaci
+                    </div>
+                    <div class="card-body">
+                        <p>Se apprezzi i miei progetti, considera una piccola donazione per supportare il mio lavoro!</p>
+                        <a href="{{ base_url }}/donazioni" class="btn btn-donazione fixed-text">Dona ora</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{# Schema.org markup per SEO #}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "headline": "{{ page.title }}",
+    "description": "{{ page.header.description|default(site.metadata.description) }}",
+    "url": "{{ page.url(true, true) }}",
+    "mainEntity": {
+        "@type": "ItemList",
+        "itemListElement": [
+            {% if collection|length > 0 %}
+                {% for project in collection %}
+                {
+                    "@type": "ListItem",
+                    "position": {{ loop.index }},
+                    "url": "{{ project.url(true, true) }}",
+                    "name": "{{ project.title }}"
+                }{% if not loop.last %},{% endif %}
+                {% endfor %}
+            {% endif %}
+        ]
+    }
+}
+</script>
+{% endblock %}

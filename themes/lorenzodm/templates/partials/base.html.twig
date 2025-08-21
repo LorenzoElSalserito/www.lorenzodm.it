@@ -1,0 +1,162 @@
+{# File: user/themes/lorenzodm/templates/partials/base.html.twig #}
+<!DOCTYPE html>
+<html lang="{{ grav.language.getActive ?: 'it' }}" data-theme="{{ theme_config.style|default('light') }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    {# Titolo e Meta Tags #}
+    <title>{% if header.title %}{{ header.title|e('html') }} | {% endif %}{{ site.title|default('lorenzodm.it')|e('html') }}</title>
+    
+    {# Meta Tags per SEO #}
+    <meta name="description" content="{{ page.header.description|default(site.metadata.description) }}">
+    <meta name="keywords" content="{{ page.header.keywords|default(site.metadata.keywords) }}">
+    <meta name="author" content="{{ site.metadata.author|default('Lorenzo DM') }}">
+    
+    {# Meta Tags per Open Graph (Facebook) #}
+    <meta property="og:title" content="{{ page.header.og_title|default(page.title ~ ' | ' ~ site.title|default('lorenzodm.it')) }}">
+    <meta property="og:description" content="{{ page.header.og_description|default(page.header.description|default(site.metadata.description)) }}">
+    <meta property="og:url" content="{{ page.url(true, true) }}">
+    <meta property="og:type" content="{{ page.header.og_type|default('website') }}">
+    <meta property="og:image" content="{{ page.header.og_image|default('theme://images/banner-liberta-digitale.jpg')|absolute_url }}">
+    
+    {# Meta Tags per Twitter #}
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ page.header.twitter_title|default(page.title ~ ' | ' ~ site.title|default('lorenzodm.it')) }}">
+    <meta name="twitter:description" content="{{ page.header.twitter_description|default(page.header.description|default(site.metadata.description)) }}">
+    <meta name="twitter:image" content="{{ page.header.twitter_image|default('theme://images/banner-liberta-digitale.jpg')|absolute_url }}">
+
+    {# Meta tag specifici per l'Infinite Scroll SEO #}
+    {% if page.template == 'blog' or page.template == 'projects' %}
+    {% set current_page = uri.param('page')|default(1) %}
+    
+    {# Se siamo su una pagina > 1, aggiungiamo un link alla prima pagina come canonical #}
+    {% if current_page > 1 %}
+        <link rel="canonical" href="{{ page.url(true, true) }}">
+    {% endif %}
+    
+    {# Aggiungiamo link per la paginazione (prev/next) per aiutare i motori di ricerca #}
+    {% set collection = page.collection() %}
+    {% set paginationLimit = config.plugins.pagination.limit|default(10) %}
+    {% set total_items = collection|length %}
+    {% set total_pages = ((total_items - 1) / paginationLimit)|round(0, 'ceil') %}
+    
+    {% if current_page > 1 %}
+        {% set prev_url = current_page > 2 
+            ? (page.url ~ '/page:' ~ (current_page - 1)) 
+            : page.url %}
+        <link rel="prev" href="{{ prev_url }}">
+    {% endif %}
+    
+    {% if current_page < total_pages %}
+        <link rel="next" href="{{ page.url ~ '/page:' ~ (current_page + 1) }}">
+    {% endif %}
+    
+    {# Meta tag per evitare l'indicizzazione delle pagine di paginazione a parte la prima #}
+    {% if current_page > 1 %}
+        <meta name="robots" content="noindex, follow">
+    {% endif %}
+{% endif %}
+
+    {# URL Canonico #}
+    <link rel="canonical" href="{{ page.url(true, true) }}">
+    
+    {# Favicon #}
+    <link rel="shortcut icon" type="image/png" href="{{ url('theme://images/favicon.png') }}">
+    
+    {# Preconnect per CDN #}
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    
+    {# CSS tramite Asset Manager #}
+    {{ assets.css()|raw }}
+    
+    {# Risoluzione diretta della banda bianca con CSS inline #}
+    <style>
+        html, body {
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow-x: hidden;
+            width: 100%;
+        }
+        body {
+            padding-top: 56px !important; /* Spazio per navbar fissa */
+        }
+        .navbar {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            width: 100% !important;
+            z-index: 1000 !important;
+        }
+        .banner-container {
+            margin: 0 !important;
+            padding: 0 !important;
+            font-size: 0 !important;
+            line-height: 0 !important;
+            display: block !important;
+            overflow: hidden !important;
+        }
+        .banner-image {
+            display: block !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 100% !important;
+        }
+    </style>
+    
+    {# Schema.org markup per SEO #}
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "{{ site.title|default('lorenzodm.it') }}",
+        "url": "{{ base_url_absolute }}",
+        "description": "{{ site.metadata.description }}",
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": "{{ base_url_absolute }}/search?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+        }
+    }
+    </script>
+    
+    {# Schema.org markup Organization per SEO #}
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "{{ site.title|default('lorenzodm.it') }}",
+        "url": "{{ base_url_absolute }}",
+        "logo": "{{ url('theme://images/lorenzodm-logo.png')|absolute_url }}",
+        "sameAs": [
+            "{{ theme_config.social_media.youtube|default('https://www.youtube.com/@LorenzoDM/videos?sub_confirmation=1') }}",
+            "{{ theme_config.social_media.telegram_personal|default('https://t.me/Lorenzo_DM') }}",
+            "{{ theme_config.social_media.mastodon|default('https://mastodon.uno/@lorenzodm') }}"
+        ]
+    }
+    </script>
+
+    {# Aggiungi SEO schema specializzato per il tipo di pagina #}
+    {% include 'partials/seo-schema.html.twig' %}
+</head>
+<body id="top">
+    {# Skip link per accessibilità #}
+    <a href="#main-content" class="skip-link">Salta al contenuto</a>
+    
+    {# Navbar fissa #}
+    {% include 'partials/navigation.html.twig' %}
+
+    {# Contenuto principale #}
+    <main id="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    {# Footer #}
+    {% include 'partials/footer.html.twig' %}
+    
+    {# JavaScript tramite Asset Manager #}
+    {{ assets.js('bottom')|raw }}
+</body>
+</html>

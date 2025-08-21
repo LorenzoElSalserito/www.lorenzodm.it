@@ -1,0 +1,106 @@
+# Configurazione principale del tema LorenzoDM per GRAV CMS
+
+# Impostazioni del tema
+enabled: true                 # Abilitazione tema
+site_name: 'lorenzodm.it'     # Nome del sito visualizzato nell'header
+custom_logo:                  # Logo personalizzato (opzionale)
+  'user/themes/lorenzodm/images/lorenzodm-logo.png'
+custom_favicon:               # Favicon personalizzato
+  'user/themes/lorenzodm/images/favicon.png'
+
+# Stile e colori
+style: light                  # Stile predefinito
+colors:
+  primary: '#004aad'          # Colore primario - blu
+  secondary: '#00be62'        # Colore secondario - verde
+  accent: '#fe5656'           # Colore accent - rosso
+  background: '#fefefe'       # Sfondo - bianco
+
+# Impostazioni SEO
+metadata:
+  description: 'Lorenzo DM - Divulgazione su libertà digitale, software libero e tecnologia open source. Articoli, video e risorse sul mondo digital.'
+  keywords: 'lorenzodm, libertà digitale, open source, software libero, tecnologia, divulgazione, FEEL Magazine'
+  author: 'Lorenzo DM'
+  og:title: 'LorenzoDM.it - Libertà Digitale e Software Libero'
+  og:description: 'Divulgazione su libertà digitale, software libero e tecnologia open source. Articoli, video e risorse sul mondo digital.'
+  og:url: 'https://lorenzodm.it'
+  og:image: 'banner-liberta-digitale.jpg'
+  og:type: 'website'
+  twitter:card: 'summary_large_image'
+  twitter:title: 'LorenzoDM.it - Libertà Digitale e Software Libero'
+  twitter:description: 'Divulgazione su libertà digitale, software libero e tecnologia open source. Articoli, video e risorse sul mondo digital.'
+  twitter:image: 'banner-liberta-digitale.jpg'
+
+# Social media
+social_media:
+  telegram_shopping: 'https://t.me/FeelShopping'
+  telegram_personal: 'https://t.me/Lorenzo_DM'
+  mastodon: 'https://mastodon.uno/@lorenzodm'
+  youtube: 'https://www.youtube.com/@LorenzoDM/videos?sub_confirmation=1'
+
+# Impostazioni per la sezione Discover
+discover_section:
+  enabled: true
+  title: 'Non ti basta?<br>Scopri di più!'
+  features:
+    - title: 'Feel News'
+      image: 'Feel News.png'
+      url: 'https://t.me/Lorenzo_DM'
+      description: 'Canale Telegram per ultime notizie'
+      
+    - title: 'Feel Shopping'
+      image: 'Feel Shopping.png'
+      url: 'https://t.me/FeelShopping'
+      description: 'Consigli per acquisti consapevoli'
+      
+    - title: 'FeelCast'
+      image: 'FeelCast.png'
+      url: 'https://www.youtube.com/watch?v=K-Y-AAFjIDE&list=PLbBaaYhhvsuNBqUWvltSfcKCkLNuhNbua&pp=gAQB'
+      description: 'Podcast sulla libertà digitale'
+
+# Impostazioni per la sezione donate
+donate_section:
+  enabled: true
+  title: 'Supportaci'
+  text: 'Se ti piace il mio lavoro, offrimi pure un caffè, per Me è TANTISSIMO! GRAZIE!'
+  button_text: 'Dona Ora'
+  button_url: '/donazioni'
+    
+# Impostazioni per la sezione magazine
+magazine_section:
+  enabled: true
+  title: 'FEEL MAGAZINE'
+  subtitle: 'Sei un Amante della lettura?'
+  text: 'La divulgazione è al primo posto per me, leggi pure tutti i miei Articoli accedendo alla sezione dedicata e contestualmente guarda i miei Contenuti Video!'
+  button_text: 'Leggi Ora!'
+  button_url: '/articoli'
+  image: 'Lorenzo DM.png'
+
+# Impostazioni delle feature in evidenza
+featured_content:
+  articles:
+    enabled: true
+    title: 'Articoli in evidenza'
+    count: 2
+    show_date: true
+    show_image: true
+
+  video:
+    enabled: true
+    title: 'Video in evidenza'
+    youtube_id: 'kXOesPxLrRA'
+
+# Impostazioni per la pagina Progetti
+projects:
+  title: 'I miei progetti'
+  subtitle: 'Scopri le iniziative e i progetti dedicati alla libertà digitale e al software libero'
+  show_date: true
+  show_tags: true
+  items_per_page: 6
+
+# Impostazioni per la pagina Partnership
+partnerships:
+  title: 'Partnership'
+  subtitle: 'Scopri i nostri partner che supportano la libertà digitale'
+  show_contact_form: true
+  contact_email: 'partnership@lorenzodm.it'

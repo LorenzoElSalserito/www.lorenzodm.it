@@ -1,0 +1,130 @@
+{# File: user/themes/lorenzodm/templates/contact.html.twig #}
+{# 
+   Template per la pagina dei contatti 
+   Compatibile con tema chiaro/scuro e ottimizzato per SEO
+   Creato per lorenzodm.it - Libertà digitale e software libero
+#}
+{% extends 'partials/base.html.twig' %}
+
+{% block content %}
+<div class="container my-5 fade-in">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card shadow border-0">
+                <div class="card-header bg-primary text-white">
+                    <h1 class="mb-0">{{ page.title }}</h1>
+                </div>
+                <div class="card-body">
+                    <div class="page-content mb-5">
+                        {{ page.content|raw }}
+                    </div>
+                    
+                    {% if config.plugins.form.enabled and page.header.form %}
+                        {% include "forms/form.html.twig" %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4 mt-4 mt-lg-0">
+            <div class="sidebar">
+                <!-- Informazioni di contatto -->
+                <div class="card mb-4 shadow border-0">
+                    <div class="card-header" style="background-color: var(--secondary-color); color: white;">
+                        <h5 class="mb-0">Informazioni di contatto</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled">
+                            <li class="mb-3">
+                                <i class="fas fa-envelope me-2 text-primary"></i> 
+                                <a href="mailto:commercial.lorenzodm@gmail.com">lorenzodm.it</a>
+                            </li>
+                            <li class="mb-3">
+                                <i class="fab fa-telegram me-2 text-primary"></i> 
+                                <a href="{{ theme_config.social_media.telegram_personal|default('https://t.me/Lorenzo_DM') }}" target="_blank" rel="noopener">
+                                    Feel News (Telegram)
+                                </a>
+                            </li>
+                            <li class="mb-3">
+                                <i class="fab fa-mastodon me-2 text-primary"></i> 
+                                <a href="{{ theme_config.social_media.mastodon|default('https://mastodon.uno/@lorenzodm') }}" target="_blank" rel="noopener">
+                                    Mastodon
+                                </a>
+                            </li>
+                            <li>
+                                <i class="fab fa-youtube me-2 text-primary"></i> 
+                                <a href="{{ theme_config.social_media.youtube|default('https://www.youtube.com/@LorenzoDM?sub_confirmation=1') }}" target="_blank" rel="noopener">
+                                    Canale YouTube
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Banner supporto -->
+                <div class="card sidebar-card">
+                    <div class="card-header Supportami-header">
+                        Supportami
+                    </div>
+                    <div class="card-body">
+                        <p>Se apprezzi i miei contenuti, considera una piccola donazione per supportare il progetto!</p>
+                        <a href="{{ base_url }}/donazioni" class="btn btn-donazione fixed-text">Dona ora</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Sezione social media -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card shadow border-0">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="h4 mb-0">Seguici sui social</h2>
+                </div>
+                <div class="card-body text-center">
+                    <div class="social-icons d-flex justify-content-center flex-wrap gap-4 fs-1">
+                        <a href="{{ theme_config.social_media.telegram_shopping|default('https://t.me/FeelShopping') }}" class="text-primary" title="Feel Shopping" target="_blank" rel="noopener">
+                            <i class="fab fa-telegram" aria-hidden="true"></i>
+                            <span class="visually-hidden">Telegram Feel Shopping</span>
+                        </a>
+                        <a href="{{ theme_config.social_media.telegram_personal|default('https://t.me/Lorenzo_DM') }}" class="text-primary" title="Feel News" target="_blank" rel="noopener">
+                            <i class="fab fa-telegram" aria-hidden="true"></i>
+                            <span class="visually-hidden">Telegram Feel News</span>
+                        </a>
+                        <a href="{{ theme_config.social_media.mastodon|default('https://mastodon.uno/@lorenzodm') }}" class="text-primary" title="Mastodon" target="_blank" rel="noopener">
+                            <i class="fab fa-mastodon" aria-hidden="true"></i>
+                            <span class="visually-hidden">Mastodon</span>
+                        </a>
+                        <a href="{{ theme_config.social_media.youtube|default('https://www.youtube.com/@LorenzoDM?sub_confirmation=1') }}" class="text-primary" title="Canale YouTube" target="_blank" rel="noopener">
+                            <i class="fab fa-youtube" aria-hidden="true"></i>
+                            <span class="visually-hidden">Canale YouTube</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{# Schema.org per pagina di contatto - Ottimizzazione SEO #}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "name": "Contatti - lorenzodm.it",
+    "url": "{{ page.url(true, true) }}",
+    "description": "Pagina di contatto di lorenzodm.it - Sito dedicato alla libertà digitale e al software libero",
+    "mainEntity": {
+        "@type": "Person",
+        "name": "Lorenzo DM",
+        "url": "{{ base_url_absolute }}",
+        "sameAs": [
+            "{{ theme_config.social_media.youtube|default('https://www.youtube.com/@LorenzoDM?sub_confirmation=1') }}",
+            "{{ theme_config.social_media.telegram_personal|default('https://t.me/Lorenzo_DM') }}",
+            "{{ theme_config.social_media.mastodon|default('https://mastodon.uno/@lorenzodm') }}"
+        ]
+    }
+}
+</script>
+{% endblock %}

@@ -1,0 +1,196 @@
+{# File: user/themes/lorenzodm/templates/default.html.twig #}
+{% extends 'partials/base.html.twig' %}
+
+{% block content %}
+    {# Banner principale #}
+    <div class="banner-container">
+        <img src="{{ url('theme://images/Subscribe.png') }}" alt="Libertà Digitale - Lorenzo DM" class="banner-image">
+        <div class="subscribe-button-container">
+            <a href="https://www.youtube.com/@LorenzoDM/?sub_confirmation=1" target="_blank" class="subscribe-button" rel="noopener">ISCRIVITI</a>
+        </div>
+    </div>
+
+    {# Sezione Magazine #}
+    <section class="magazine-section fade-in">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h1 class="magazine-title">FEEL MAGAZINE</h1>
+                    <div class="magazine-text">
+                        <p>Sei un Amante della lettura?</p>
+                        <p>La divulgazione è al primo posto per me, leggi pure tutti i miei Articoli accedendo alla sezione dedicata e contestualmente guarda i miei Contenuti Video!</p>
+                    </div>
+                    <a href="{{ base_url }}/articoli" class="btn btn-primary btn-lg px-4 fw-bold">Leggi Ora!</a>
+                </div>
+                <div class="col-md-6 text-center">
+                    <img src="{{ url('theme://images/Lorenzo DM.png') }}" alt="FEEL Magazine - Icona News" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# Sezione Discover #}
+    <section class="discover-section fade-in">
+        <div class="container">
+            <h2 class="section-title">Non ti basta?<br>Scopri di più!</h2>
+            
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <a href="https://t.me/Lorenzo_DM" class="feature-card-link" target="_blank" rel="noopener">
+                        <div class="feature-card">
+                            <div class="feature-card-content">
+                                <img src="{{ url('theme://images/Feel News.png') }}" alt="Feel News - Canale Telegram" class="feature-logo">
+                                <h3>Feel News</h3>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <a href="https://t.me/FeelShopping" class="feature-card-link" target="_blank" rel="noopener">
+                        <div class="feature-card">
+                            <div class="feature-card-content">
+                                <img src="{{ url('theme://images/Feel Shopping.png') }}" alt="Feel Shopping - Canale Telegram" class="feature-logo">
+                                <h3>Feel Shopping</h3>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <a href="https://www.youtube.com/watch?v=K-Y-AAFjIDE&list=PLbBaaYhhvsuNBqUWvltSfcKCkLNuhNbua&pp=gAQB" class="feature-card-link" target="_blank" rel="noopener">
+                        <div class="feature-card">
+                            <div class="feature-card-content">
+                                <img src="{{ url('theme://images/FeelCast.png') }}" alt="FeelCast - Podcast di Lorenzo DM" class="feature-logo">
+                                <h3>FeelCast</h3>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# Contenuti in evidenza #}
+    <div class="container mt-5 fade-in">
+        <div class="row">
+            {# Articoli in evidenza #}
+            <div class="col-md-8">
+                <h2 class="mb-4">Articoli in evidenza</h2>
+            
+            <div class="row">
+                {% set articoli = page.find('/articoli') %}
+                {% if articoli %}
+                    {% set articoli_collection = articoli.children.visible.order('date', 'desc').slice(0, 2) %}
+                    
+                    {% if articoli_collection|length > 0 %}
+                        {% for articolo in articoli_collection %}
+                            <div class="col-md-6 mb-4">
+                                <article class="card h-100">
+                                    {% if articolo.header.image %}
+                                        <img loading="lazy" src="{{ url('theme://images/' ~ articolo.header.image) }}" class="card-img-top" alt="{{ articolo.title }}">
+                                    {% else %}
+                                        <img loading="lazy" src="{{ url('theme://images/default-article.jpg') }}" class="card-img-top" alt="{{ articolo.title }}">
+                                    {% endif %}
+                                    
+                                    <div class="card-body">
+                                        <h3 class="card-title">{{ articolo.title }}</h3>
+                                        <p class="card-text">
+                                            {% if articolo.summary %}
+                                                {{ articolo.summary|striptags|truncate(150) }}
+                                            {% else %}
+                                                {{ articolo.content|striptags|truncate(150) }}
+                                            {% endif %}
+                                        </p>
+                                        <a href="{{ articolo.url }}" class="btn btn-primary">Leggi di più</a>
+                                    </div>
+                                </article>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="col-12">
+                            <div class="alert alert-info">
+                                Nessun articolo disponibile al momento.
+                            </div>
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <div class="col-12">
+                        <div class="alert alert-warning">
+                            La sezione degli articoli non è stata trovata. Verifica che esista la pagina "/articoli".
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+                
+                {# Video in evidenza #}
+                <h2 class="my-4">Video in evidenza</h2>
+                <div class="video-wrapper">
+                    <iframe 
+                        src="https://www.youtube.com/embed/kXOesPxLrRA" 
+                        title="Video in evidenza di Lorenzo DM"
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+            
+            {# Sidebar #}
+            <aside class="col-md-4">
+                <div class="card mb-4">
+                    <div class="card-header" style="background-color: var(--secondary-color); color: white;">
+                        Ultimi aggiornamenti
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        {% set updates = pages.find('/articoli').children.visible.order('date', 'desc').slice(0, 3) %}
+                        {% if updates|length > 0 %}
+                            {% for update in updates %}
+                                <li class="list-group-item">
+                                    Nuovo articolo pubblicato: <a href="{{ update.url }}">{{ update.title }}</a>
+                                </li>
+                            {% endfor %}
+                        {% else %}
+                            <li class="list-group-item">Nessun aggiornamento recente</li>
+                        {% endif %}
+                    </ul>
+                </div>
+                
+                <div class="card sidebar-card">
+                    <div class="card-header Supportami-header">
+                        Supportami
+                    </div>
+                    <div class="card-body">
+                        <p>Se apprezzi i miei contenuti, considera una piccola donazione per supportare il progetto!</p>
+                        <a href="{{ base_url }}/donazioni" class="btn btn-donazione fixed-text">Dona ora</a>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    {# Sezione Donazioni #}
+    <section class="donate-section mt-5 fade-in">
+        <div class="container">
+            <div class="donate-text">
+                Se ti piace il mio lavoro, offrimi pure un caffè, per Me è TANTISSIMO! GRAZIE!
+            </div>
+            
+            <div class="italian-flag">
+                <div class="flag-stripe flag-green"></div>
+                <div class="flag-stripe flag-white"></div>
+                <div class="flag-stripe flag-red"></div>
+            </div>
+            
+            <div class="text-center">
+                <a
+                    href="https://www.paypal.me/lorenzodemarco92"
+                    target="_blank"
+                    rel="noopener"
+                    class="donate-button"
+                >
+                    Dona Ora
+                </a>
+            </div>
+
+        </div>
+    </section>
+{% endblock %}

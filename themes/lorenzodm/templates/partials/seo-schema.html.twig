@@ -1,0 +1,99 @@
+<!-- File: user/themes/lorenzodm/templates/partials/seo-schema.html.twig -->
+
+{# Questo file fornisce i markup di Schema.org per vari tipi di pagine #}
+
+{% if page.template == 'contact' %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "url": "{{ page.url(true, true) }}",
+    "name": "{{ page.title }} - lorenzodm.it",
+    "description": "{{ page.header.metadata.description|default('Contatta Lorenzo DM per discussioni su libertà digitale, software libero e tecnologia open source') }}",
+    "mainEntity": {
+        "@type": "Person",
+        "name": "Lorenzo DM",
+        "email": "info@lorenzodm.it",
+        "url": "{{ base_url_absolute }}",
+        "sameAs": [
+            "{{ theme_config.social_media.youtube|default('https://www.youtube.com/@LorenzoDM?sub_confirmation=1') }}",
+            "{{ theme_config.social_media.telegram_personal|default('https://t.me/Lorenzo_DM') }}",
+            "{{ theme_config.social_media.mastodon|default('https://mastodon.uno/@lorenzodm') }}"
+        ]
+    }
+}
+</script>
+{% elseif page.template == 'item' or page.template == 'blog_item' %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "{{ page.title }}",
+    "description": "{{ page.header.metadata.description|default(page.summary|striptags) }}",
+    "image": "{{ page.header.image ? url('theme://images/' ~ page.header.image)|absolute_url : url('theme://images/default-article.jpg')|absolute_url }}",
+    "datePublished": "{{ page.date|date('c') }}",
+    "dateModified": "{{ page.modified ? page.modified|date('c') : page.date|date('c') }}",
+    "author": {
+        "@type": "Person",
+        "name": "Lorenzo DM",
+        "url": "{{ base_url_absolute }}"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "lorenzodm.it",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "{{ url('theme://images/lorenzodm-logo.png')|absolute_url }}"
+        }
+    },
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "{{ page.url(true, true) }}"
+    },
+    "keywords": "{{ page.header.metadata.keywords|default('libertà digitale, software libero, open source, tecnologia') }}"
+}
+</script>
+{% elseif page.template == 'blog' %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "name": "{{ page.title }} - lorenzodm.it",
+    "description": "{{ page.header.metadata.description|default('Blog su libertà digitale, software libero e tecnologia open source') }}",
+    "url": "{{ page.url(true, true) }}",
+    "publisher": {
+        "@type": "Organization",
+        "name": "lorenzodm.it",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "{{ url('theme://images/lorenzodm-logo.png')|absolute_url }}"
+        }
+    }
+}
+</script>
+{% elseif page.template == 'default' and page.slug == 'home' %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "lorenzodm.it - Libertà Digitale e Software Libero",
+    "url": "{{ base_url_absolute }}",
+    "description": "{{ site.metadata.description }}",
+    "author": {
+        "@type": "Person",
+        "name": "Lorenzo DM",
+        "url": "{{ base_url_absolute }}"
+    },
+    "potentialAction": {
+        "@type": "SearchAction",
+        "target": "{{ base_url_absolute }}/cerca?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+    },
+    "sameAs": [
+        "{{ theme_config.social_media.youtube|default('https://www.youtube.com/@LorenzoDM?sub_confirmation=1') }}",
+        "{{ theme_config.social_media.telegram_personal|default('https://t.me/Lorenzo_DM') }}",
+        "{{ theme_config.social_media.mastodon|default('https://mastodon.uno/@lorenzodm') }}"
+    ]
+}
+</script>
+{% endif %}

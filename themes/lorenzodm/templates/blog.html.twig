@@ -1,0 +1,191 @@
+{# File: user/themes/lorenzodm/templates/blog.html.twig #}
+{% extends 'partials/base.html.twig' %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <h1 class="page-title">{{ page.title }}</h1>
+        {% if page.header.subtitle %}
+            <p class="page-subtitle">{{ page.header.subtitle }}</p>
+        {% endif %}
+    </div>
+</div>
+
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-8">
+            {% if page.content %}
+                <div class="page-content mb-5">
+                    {{ page.content|raw }}
+                </div>
+            {% endif %}
+            
+            <div class="articles-grid">
+                {% set collection = page.collection() %}
+                {% set paginationLimit = config.plugins.pagination.limit|default(10) %}
+                
+                {% for article in collection.slice(0, paginationLimit) %}
+                    <article class="card content-card mb-4 fade-in">
+                        <div class="row g-0">
+                            <div class="col-md-4">
+                                {% if article.header.image %}
+                                    <img src="{{ url('theme://images/' ~ article.header.image) }}" 
+                                         class="card-img-top h-100 object-fit-cover" 
+                                         alt="{{ article.title }}" 
+                                         loading="lazy">
+                                {% else %}
+                                    <img src="{{ url('theme://images/default-article.jpg') }}" 
+                                         class="card-img-top h-100 object-fit-cover" 
+                                         alt="{{ article.title }}" 
+                                         loading="lazy">
+                                {% endif %}
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body d-flex flex-column h-100">
+                                    <div class="card-header-custom">
+                                        <h2 class="card-title h4">{{ article.title }}</h2>
+                                    </div>
+                                    
+                                    {% if article.header.date %}
+                                        <p class="card-subtitle text-muted small mb-2">
+                                            <i class="far fa-calendar-alt me-1"></i> {{ article.header.date|date("d/m/Y") }}
+                                        </p>
+                                    {% endif %}
+                                    
+                                    <p class="card-text flex-grow-1">{{ article.summary|striptags|truncate(500) }}</p>
+                                    
+                                    <div class="card-footer-custom mt-auto">
+                                        <a href="{{ article.url }}" class="btn btn-primary stretched-link">Leggi di più</a>
+                                        
+                                        {% if article.taxonomy.tag %}
+                                            <div class="mt-2">
+                                                {% for tag in article.taxonomy.tag %}
+                                                    <span class="badge bg-secondary me-1">{{ tag }}</span>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                {% else %}
+                    <div class="alert alert-info">
+                        Nessun contenuto disponibile al momento.
+                    </div>
+                {% endfor %}
+            </div>
+            
+            {% if not function('is_ajax_request') and config.plugins.pagination.enabled and collection.params.pagination %}
+                {% include 'partials/pagination.html.twig' with {'base_url': page.url, 'pagination': collection.params.pagination} %}
+            {% endif %}
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="sidebar">
+                <!-- Ricerca -->
+                {% if config.plugins.simplesearch.enabled %}
+                    <div class="card sidebar-card mb-4">
+                        <div class="card-header">
+                            <h3 class="h5 mb-0">Cerca</h3>
+                        </div>
+                        <div class="card-body">
+                            {% include 'partials/simplesearch_searchbox.html.twig' %}
+                        </div>
+                    </div>
+                {% endif %}
+                
+                <!-- Ultimi contenuti -->
+                <div class="card sidebar-card mb-4">
+                    <div class="card-header">
+                        <h3 class="h5 mb-0">Ultimi {{ page.title }}</h3>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        {% for item in page.collection.order('date', 'desc').slice(0, 5) %}
+                            <li class="list-group-item sidebar-item">
+                                <a href="{{ item.url }}" class="d-block text-truncate">{{ item.title }}</a>
+                                {% if item.header.date %}
+                                    <div class="small text-muted">{{ item.header.date|date("d/m/Y") }}</div>
+                                {% endif %}
+                            </li>
+                        {% else %}
+                            <li class="list-group-item">Nessun contenuto disponibile</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                
+                <!-- Tag popolari -->
+                {% if config.plugins.taxonomylist.enabled %}
+                    <div class="card sidebar-card mb-4">
+                        <div class="card-header">
+                            <h3 class="h5 mb-0">Tag popolari</h3>
+                        </div>
+                        <div class="card-body">
+                            {% include 'partials/taxonomylist.html.twig' with {'taxonomy': 'tag'} %}
+                        </div>
+                    </div>
+                {% endif %}
+                
+                <!-- Supportami -->
+                <div class="card sidebar-card">
+                    <div class="card-header Supportami-header">
+                        Supportami
+                    </div>
+                    <div class="card-body">
+                        <p>Se apprezzi i nostri contenuti, considera una piccola donazione per supportare il progetto!</p>
+                        <a href="{{ base_url }}/donazioni" class="btn btn-donazione fixed-text">Dona ora</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{# Schema.org markup per SEO #}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "headline": "{{ page.title }}",
+    "description": "{{ page.header.description|default(site.metadata.description) }}",
+    "url": "{{ page.url(true, true) }}",
+    "mainEntity": {
+        "@type": "ItemList",
+        "itemListElement": [
+            {% for article in collection.slice(0, paginationLimit) %}
+            {
+                "@type": "ListItem",
+                "position": {{ loop.index }},
+                "url": "{{ article.url(true, true) }}",
+                "name": "{{ article.title }}"
+            }{% if not loop.last %},{% endif %}
+            {% endfor %}
+        ]
+    }
+}
+</script>
+
+{# Carica gli script solo nelle pagine non AJAX #}
+{% if not function('is_ajax_request') %}
+    <script src="{{ url('theme://js/infinite-scroll.js') }}"></script>
+    <style>
+        /* Stili per infinite scroll */
+        .loading-indicator {
+            padding: 20px;
+            text-align: center;
+            color: var(--primary-color);
+        }
+        
+        .articles-grid article {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        
+        .articles-grid article.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+{% endif %}
+{% endblock %}

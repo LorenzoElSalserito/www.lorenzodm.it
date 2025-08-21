@@ -1,0 +1,52 @@
+{# File: user/themes/lorenzodm/templates/partials/navigation.html.twig #}
+<nav class="navbar navbar-expand-lg">
+    <div class="container">
+        {# Logo/Brand - Solo testo #}
+        <a class="navbar-brand" href="{{ base_url }}">
+            {{ theme_config.site_name|default('lorenzodm.it') }}
+        </a>
+        
+        {# Toggle per mobile #}
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        {# Menu principale #}
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                {% for p in pages.children.visible %}
+                    {% set current_page = (p.active or p.activeChild) ? 'active' : '' %}
+                    <li class="nav-item">
+                        <a class="nav-link {{ current_page }}" 
+                           href="{{ p.url }}" 
+                           {% if current_page %}aria-current="page"{% endif %}>
+                            {{ p.menu|default(p.title) }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+            
+            
+            
+        </div>
+    </div>
+</nav>
+
+{# Microdata schema.org per la navigazione #}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "SiteNavigationElement",
+    "name": [
+        {% for p in pages.children.visible %}
+            "{{ p.menu|default(p.title) }}"{% if not loop.last %},{% endif %}
+        {% endfor %}
+    ],
+    "url": [
+        {% for p in pages.children.visible %}
+            "{{ p.url(true, true) }}"{% if not loop.last %},{% endif %}
+        {% endfor %}
+    ]
+}
+</script>

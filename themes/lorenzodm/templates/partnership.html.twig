@@ -1,0 +1,147 @@
+{# File: user/themes/lorenzodm/templates/partnership.html.twig #}
+{% extends 'partials/base.html.twig' %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <h1 class="page-title">{{ page.title }}</h1>
+        {% if page.header.subtitle %}
+            <p class="page-subtitle">{{ page.header.subtitle }}</p>
+        {% endif %}
+    </div>
+</div>
+
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-12">
+            {% if page.content %}
+                <div class="page-content mb-5">
+                    {{ page.content|raw }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    {% if page.header.partnerships %}
+        <div class="partnership-section">
+            <div class="row">
+                {% for partnership in page.header.partnerships %}
+                    <div class="col-md-4 mb-4">
+                        <a href="{{ partnership.url }}" class="feature-card-link" target="_blank" rel="noopener">
+                            <div class="feature-card partnership-card">
+                                <div class="feature-card-content">
+                                    {% if partnership.image %}
+                                        <img src="{{ url('theme://images/' ~ partnership.image) }}" 
+                                             alt="{{ partnership.title }} - {{ partnership.description|default('') }}" 
+                                             class="feature-logo"
+                                             loading="lazy">
+                                    {% endif %}
+                                    <h3>{{ partnership.title }}</h3>
+                                    {% if partnership.description %}
+                                        <p class="partnership-description">{{ partnership.description }}</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+    
+    {% if page.header.collaborations %}
+        <div class="collaborations-section mt-5">
+            <h2 class="section-title mb-4">{{ page.header.collaborations_title|default('Collaborazioni') }}</h2>
+            <div class="row">
+                {% for collaboration in page.header.collaborations %}
+                    <div class="col-md-6 mb-4">
+                        <div class="card collaboration-card">
+                            <div class="row g-0">
+                                <div class="col-md-4">
+                                    {% if collaboration.image %}
+                                        <img src="{{ url('theme://images/' ~ collaboration.image) }}" 
+                                             class="collaboration-img" 
+                                             alt="{{ collaboration.title }}"
+                                             loading="lazy">
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <h3 class="card-title">{{ collaboration.title }}</h3>
+                                        {% if collaboration.description %}
+                                            <p class="card-text">{{ collaboration.description }}</p>
+                                        {% endif %}
+                                        {% if collaboration.url %}
+                                            <a href="{{ collaboration.url }}" class="btn btn-primary" target="_blank" rel="noopener">Visita</a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+{# Sezione contatti per potenziali partner #}
+{#<section class="contact-partners-section py-5 mt-4">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <h2 class="mb-4">Vuoi diventare partner?</h2>
+                <p class="lead mb-5">Se sei interessato a collaborare con lorenzodm.it, contattaci utilizzando il modulo sottostante o via email.</p>
+                
+                {% if config.plugins.form.enabled %}
+                     {% include 'forms/form.html.twig' %}
+                {% else %}
+                    <div class="contact-info">
+                        <a href="mailto:info@lorenzodm.it" class="btn btn-lg btn-primary">Contattaci via Email</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>#}
+
+{# Schema.org markup per SEO #}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "{{ page.title }}",
+    "description": "{{ page.header.description|default(site.metadata.description) }}",
+    "url": "{{ page.url(true, true) }}",
+    "mainEntity": {
+        "@type": "ItemList",
+        "itemListElement": [
+            {% for partnership in page.header.partnerships %}
+            {
+                "@type": "ListItem",
+                "position": {{ loop.index }},
+                "item": {
+                    "@type": "Organization",
+                    "name": "{{ partnership.title }}",
+                    "description": "{{ partnership.description|default('') }}",
+                    "url": "{{ partnership.url }}"
+                }
+            }{% if not loop.last or page.header.collaborations %},{% endif %}
+            {% endfor %}
+            {% for collaboration in page.header.collaborations %}
+            {
+                "@type": "ListItem",
+                "position": {{ (page.header.partnerships|length) + loop.index }},
+                "item": {
+                    "@type": "Organization",
+                    "name": "{{ collaboration.title }}",
+                    "description": "{{ collaboration.description|default('') }}",
+                    "url": "{{ collaboration.url }}"
+                }
+            }{% if not loop.last %},{% endif %}
+            {% endfor %}
+        ]
+    }
+}
+</script>
+{% endblock %}

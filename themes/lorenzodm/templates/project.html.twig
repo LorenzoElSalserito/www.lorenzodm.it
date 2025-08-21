@@ -1,0 +1,271 @@
+{# File: user/themes/lorenzodm/templates/project.html.twig #}
+{% extends 'partials/base.html.twig' %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <article class="project-article" itemscope itemtype="https://schema.org/Article">
+                <header class="article-header">
+                    <h1 class="article-title" itemprop="headline">{{ page.title }}</h1>
+                    
+                    <div class="article-meta">
+                        {% if page.header.date %}
+                            <span class="article-date">
+                                <i class="far fa-calendar-alt me-1"></i> Pubblicato il: 
+                                <time datetime="{{ page.header.date|date('Y-m-d') }}" itemprop="datePublished">
+                                    {{ page.header.date|date('d/m/Y') }}
+                                </time>
+                            </span>
+                        {% endif %}
+                        
+                        {% if page.header.author %}
+                            <span class="article-author ms-3" itemprop="author" itemscope itemtype="https://schema.org/Person">
+                                <i class="far fa-user me-1"></i> Autore: 
+                                <span itemprop="name">{{ page.header.author }}</span>
+                            </span>
+                        {% endif %}
+                        
+                        {% if page.header.status %}
+                            <span class="project-status ms-3">
+                                <i class="far fa-flag me-1"></i> Stato: 
+                                <span class="badge {% if page.header.status == 'Completato' %}bg-success{% elseif page.header.status == 'In corso' %}bg-warning{% else %}bg-info{% endif %}">
+                                    {{ page.header.status }}
+                                </span>
+                            </span>
+                        {% endif %}
+                    </div>
+                    
+                    {% if page.header.image %}
+                        <div class="article-featured-image mt-4">
+                            <img src="{{ url('theme://images/' ~ page.header.image) }}" 
+                                 alt="{{ page.title }}" 
+                                 class="img-fluid rounded shadow-sm"
+                                 itemprop="image"
+                                 loading="lazy">
+                        </div>
+                    {% endif %}
+                </header>
+                
+                <div class="article-content mt-4" itemprop="articleBody">
+                    {{ page.content|raw }}
+                </div>
+                
+                {% if page.header.project_details %}
+                <div class="project-details mt-5 p-4 bg-light rounded shadow-sm">
+                    <h3 class="h4 mb-3">Dettagli del progetto</h3>
+                    <div class="row">
+                        {% if page.header.project_details.start_date %}
+                        <div class="col-md-6 mb-3">
+                            <strong><i class="fas fa-calendar-day me-2"></i> Data inizio:</strong> 
+                            {{ page.header.project_details.start_date|date('d/m/Y') }}
+                        </div>
+                        {% endif %}
+                        
+                        {% if page.header.project_details.end_date %}
+                        <div class="col-md-6 mb-3">
+                            <strong><i class="fas fa-calendar-check me-2"></i> Data fine:</strong> 
+                            {{ page.header.project_details.end_date|date('d/m/Y') }}
+                        </div>
+                        {% endif %}
+                        
+                        {% if page.header.project_details.client %}
+                        <div class="col-md-6 mb-3">
+                            <strong><i class="fas fa-briefcase me-2"></i> Cliente:</strong> 
+                            {{ page.header.project_details.client }}
+                        </div>
+                        {% endif %}
+                        
+                        {% if page.header.project_details.technologies %}
+                        <div class="col-md-6 mb-3">
+                            <strong><i class="fas fa-code me-2"></i> Tecnologie:</strong> 
+                            {% if page.header.project_details.technologies is iterable %}
+                                {{ page.header.project_details.technologies|join(', ') }}
+                            {% else %}
+                                {{ page.header.project_details.technologies }}
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                        
+                        {% if page.header.project_details.website %}
+                        <div class="col-md-6 mb-3">
+                            <strong><i class="fas fa-globe me-2"></i> Sito web:</strong> 
+                            <a href="{{ page.header.project_details.website }}" target="_blank" rel="noopener">{{ page.header.project_details.website }}</a>
+                        </div>
+                        {% endif %}
+                        
+                        {% if page.header.project_details.repository %}
+                        <div class="col-md-6 mb-3">
+                            <strong><i class="fab fa-github me-2"></i> Repository:</strong> 
+                            <a href="{{ page.header.project_details.repository }}" target="_blank" rel="noopener">Visualizza su GitHub</a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+                
+                <footer class="article-footer mt-5 pt-4 border-top">
+                    {% if page.taxonomy.tag %}
+                        <div class="article-tags mb-4">
+                            <span class="fw-bold">Tags:</span>
+                            {% for tag in page.taxonomy.tag %}
+                                <a href="{{ base_url }}/tag:{{ tag }}" class="badge bg-secondary text-decoration-none me-1">{{ tag }}</a>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    
+                    <div class="article-sharing mt-4">
+                        <h5>Condividi questo progetto:</h5>
+                        <div class="d-flex gap-3 fs-4">
+                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ page.url(true) }}" 
+                               target="_blank" rel="noopener" 
+                               class="text-primary" 
+                               aria-label="Condividi su Facebook">
+                                <i class="fab fa-facebook"></i>
+                            </a>
+                            <a href="https://twitter.com/intent/tweet?url={{ page.url(true) }}&text={{ page.title|url_encode }}" 
+                               target="_blank" rel="noopener" 
+                               class="text-info" 
+                               aria-label="Condividi su Twitter">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="https://t.me/share/url?url={{ page.url(true) }}&text={{ page.title|url_encode }}" 
+                               target="_blank" rel="noopener" 
+                               class="text-info" 
+                               aria-label="Condividi su Telegram">
+                                <i class="fab fa-telegram"></i>
+                            </a>
+                            <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ page.url(true) }}&title={{ page.title|url_encode }}" 
+                               target="_blank" rel="noopener" 
+                               class="text-primary" 
+                               aria-label="Condividi su LinkedIn">
+                                <i class="fab fa-linkedin"></i>
+                            </a>
+                        </div>
+                    </div>
+                </footer>
+            </article>
+            
+            {% if config.plugins.comments.enabled %}
+                {% include 'partials/comments.html.twig' %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% set project_summary = '' %}
+{% if page.header.summary is defined %}
+    {% if page.header.summary is iterable and page.header.summary.text is defined %}
+        {% set project_summary = page.header.summary.text %}
+    {% elseif page.header.summary is not iterable %}
+        {% set project_summary = page.header.summary %}
+    {% endif %}
+{% else %}
+    {% set project_summary = page.content|striptags|truncate(160) %}
+{% endif %}
+
+<div class="container mb-5">
+    <div class="row">
+        <div class="col-12">
+            <h3 class="mb-4">Progetti correlati</h3>
+        </div>
+        
+        {% set related_projects = page.collection({'items': {'@taxonomy.tag': page.taxonomy.tag}, 'limit': 3, 'order': {'by': 'date', 'dir': 'desc'}}) %}
+        
+        {% if related_projects|length > 0 %}
+            {% for project in related_projects if project.path != page.path %}
+                {% set related_summary = '' %}
+                {% if project.header.summary is defined %}
+                    {% if project.header.summary is iterable and project.header.summary.text is defined %}
+                        {% set related_summary = project.header.summary.text|striptags|truncate(120) %}
+                    {% elseif project.header.summary is not iterable %}
+                        {% set related_summary = project.header.summary|striptags|truncate(120) %}
+                    {% endif %}
+                {% else %}
+                    {% set related_summary = project.content|striptags|truncate(120) %}
+                {% endif %}
+                
+                <div class="col-md-4 mb-4">
+                    <article class="card content-card h-100">
+                        {% if project.header.image %}
+                            <img loading="lazy" src="{{ url('theme://images/' ~ project.header.image) }}" class="card-img-top" alt="{{ project.title }}">
+                        {% else %}
+                            <img loading="lazy" src="{{ url('theme://images/default-project.jpg') }}" class="card-img-top" alt="{{ project.title }}">
+                        {% endif %}
+                        
+                        <div class="card-body d-flex flex-column">
+                            <div class="card-header-custom">
+                                <h3 class="card-title h5">{{ project.title }}</h3>
+                            </div>
+                            
+                            <p class="card-text small flex-grow-1">
+                                {{ related_summary }}
+                            </p>
+                            <a href="{{ project.url }}" class="btn btn-primary btn-sm mt-auto">Scopri di più</a>
+                        </div>
+                    </article>
+                </div>
+            {% else %}
+                <div class="col-12">
+                    <p>Nessun progetto correlato disponibile.</p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12">
+                <p>Nessun progetto correlato disponibile.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+{# Schema.org markup per SEO #}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "{{ page.url(true, true) }}"
+    },
+    "headline": "{{ page.title }}",
+    "description": "{{ project_summary|striptags }}",
+    "image": "{{ (page.header.image ? url('theme://images/' ~ page.header.image)|absolute_url : url('theme://images/default-project.jpg')|absolute_url) }}",
+    "datePublished": "{{ page.header.date|default('now')|date('c') }}",
+    "dateModified": "{{ page.header.modified|default(page.header.date|default('now'))|date('c') }}",
+    "author": {
+        "@type": "Person",
+        "name": "{{ page.header.author|default('Lorenzo DM') }}"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "lorenzodm.it",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "{{ url('theme://images/lorenzodm-logo.png')|absolute_url }}"
+        }
+    }
+}
+{# Carica gli script solo nelle pagine non AJAX #}
+{% if not function('is_ajax_request') %}
+    <script src="{{ url('theme://js/infinite-scroll.js') }}"></script>
+    <style>
+        /* Stili per infinite scroll */
+        .loading-indicator {
+            padding: 20px;
+            text-align: center;
+            color: var(--primary-color);
+        }
+        
+        .projects-grid article {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        
+        .projects-grid article.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+{% endif %}
+{% endblock %}

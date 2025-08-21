@@ -1,0 +1,16 @@
+name: Lorenzo DM
+version: 1.0.0
+description: "Tema personalizzato per lorenzodm.it - Libertà digitale e software libero"
+icon: rebel
+author:
+  name: Lorenzo DM
+  email: info@lorenzodm.it
+  url: https://lorenzodm.it
+homepage: https://github.com/lorenzodm/grav-theme-lorenzodm
+demo: https://lorenzodm.it
+keywords: lorenzodm, theme, libertà, digitale, software libero
+bugs: https://github.com/lorenzodm/grav-theme-lorenzodm/issues
+license: MIT
+
+dependencies:
+  - { name: grav, version: '>=1.6.0' }

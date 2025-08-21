@@ -1,0 +1,794 @@
+# Ottimizzazione dei file GRAV CMS
+
+## 1. File di configurazione principale - lorenzodm.yaml
+```yaml
+# Configurazione del tema LorenzoDM.it per GRAV CMS
+
+# Impostazioni del tema
+theme:
+  enabled: true
+  custom_logo:
+    user/themes/lorenzodm/images/lorenzodm-logo.png
+  custom_favicon:
+    user/themes/lorenzodm/images/favicon.png
+  fixed_header: true
+  style: light
+  colors:
+    primary: '#004aad'
+    secondary: '#00be62'
+    accent: '#fe5656'
+    background: '#fefefe'
+
+# Configurazione globale SEO
+metadata:
+  description: 'Lorenzo DM - Divulgazione su libertà digitale, software libero e tecnologia open source. Articoli, video e risorse sul mondo digital.'
+  keywords: 'lorenzodm, libertà digitale, open source, software libero, tecnologia, divulgazione, FEEL Magazine'
+  author: 'Lorenzo DM'
+  'og:title': 'LorenzoDM.it - Libertà Digitale e Software Libero'
+  'og:description': 'Divulgazione su libertà digitale, software libero e tecnologia open source. Articoli, video e risorse sul mondo digital.'
+  'og:url': 'https://lorenzodm.it'
+  'og:image': 'banner-liberta-digitale.jpg'
+  'og:type': 'website'
+  'twitter:card': 'summary_large_image'
+  'twitter:title': 'LorenzoDM.it - Libertà Digitale e Software Libero'
+  'twitter:description': 'Divulgazione su libertà digitale, software libero e tecnologia open source. Articoli, video e risorse sul mondo digital.'
+  'twitter:image': 'banner-liberta-digitale.jpg'
+
+# Configurazione delle sezioni personalizzate
+custom_sections:
+  # Configurazione bottoni nella sezione Discover
+  discover_features:
+    enabled: true
+    features:
+      - title: 'Feel News'
+        image: feel-news.jpg
+        url: 'https://t.me/Lorenzo_DM'
+        description: 'Canale Telegram per ultime notizie'
+        
+      - title: 'Feel Shopping'
+        image: feel-shopping.jpg
+        url: 'https://t.me/FeelShopping'
+        description: 'Consigli per acquisti consapevoli'
+        
+      - title: 'FeelCast'
+        image: feelcast.jpg
+        url: 'https://www.youtube.com/watch?v=K-Y-AAFjIDE&list=PLbBaaYhhvsuNBqUWvltSfcKCkLNuhNbua&pp=gAQB'
+        description: 'Podcast sulla libertà digitale'
+
+  # Configurazione sezione donate
+  donate_section:
+    enabled: true
+    title: 'Supportaci'
+    text: 'Se ti piace il mio lavoro, offrimi pure un caffè, per Me è TANTISSIMO! GRAZIE!'
+    button_text: 'Dona Ora'
+    button_url: '/donazioni'
+    
+  # Configurazione sezione magazine
+  magazine_section:
+    enabled: true
+    title: 'FEEL MAGAZINE'
+    subtitle: 'Sei un Amante della lettura?'
+    text: 'La divulgazione è al primo posto per me, leggi pure tutti i miei Articoli accedendo alla sezione dedicata e contestualmente guarda i miei Contenuti Video!'
+    button_text: 'Leggi Ora!'
+    button_url: '/articoli'
+    image: 'news-icon.png'
+
+# Impostazioni per i social media
+social_media:
+  telegram_shopping: 'https://t.me/FeelShopping'
+  telegram_personal: 'https://t.me/Lorenzo_DM'
+  mastodon: 'https://mastodon.uno/@lorenzodm'
+  youtube: 'https://www.youtube.com/@LorenzoDM/videos?sub_confirmation=1'
+```
+
+## 2. Template Twig principale - base.html.twig
+```twig
+<!DOCTYPE html>
+<html lang="{{ grav.language.getActive ?: 'it' }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% include 'partials/metadata.html.twig' %}
+    <title>{% if header.title %}{{ header.title|e('html') }} | {% endif %}{{ site.title|e('html') }}</title>
+    
+    {% include 'partials/stylesheets.html.twig' %}
+    
+    <!-- Canonical -->
+    <link rel="canonical" href="{{ page.url(true, true) }}">
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/png" href="{{ url('theme://images/favicon.png') }}">
+    
+    {% block stylesheets %}{% endblock %}
+    {{ assets.css() }}
+</head>
+<body id="top" class="{{ page.header.body_classes }}">
+    <!-- Skip to content per accessibilità -->
+    <a href="#main-content" class="skip-link">Salta al contenuto</a>
+    
+    <!-- Navbar fisso -->
+    {% include 'partials/navigation.html.twig' %}
+
+    {% block content %}{% endblock %}
+
+    <!-- Footer -->
+    {% include 'partials/footer.html.twig' %}
+    
+    <!-- Scripts -->
+    {% include 'partials/scripts.html.twig' %}
+    {% block javascripts %}{% endblock %}
+    {{ assets.js() }}
+    
+    <!-- Structured data for SEO -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "{{ site.title }}",
+        "url": "{{ base_url_absolute }}",
+        "description": "{{ site.metadata.description }}",
+        "author": {
+            "@type": "Person",
+            "name": "{{ site.metadata.author }}"
+        },
+        "sameAs": [
+            "{{ theme_config.social_media.youtube }}",
+            "{{ theme_config.social_media.telegram_personal }}",
+            "{{ theme_config.social_media.mastodon }}"
+        ]
+    }
+    </script>
+</body>
+</html>
+```
+
+## 3. Template Twig per la sezione Discover - features.html.twig
+```twig
+{% block features %}
+<section class="discover-section fade-in">
+    <div class="container">
+        <div class="text-center">
+            {{ content|raw }}
+        </div>
+        
+        <div class="row">
+            {% for feature in page.header.features %}
+                <div class="col-md-4 mb-4">
+                    <a href="{{ feature.url }}" class="feature-card-link" target="_blank" rel="noopener">
+                        <div class="feature-card">
+                            <div class="feature-card-content">
+                                <img src="{{ url('theme://images/' ~ feature.image) }}" alt="{{ feature.title }} - {{ feature.description|default('') }}" class="feature-logo">
+                                <h3>{{ feature.title }}</h3>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}
+```
+
+## 4. Stylesheet personalizzato - custom.css
+```css
+:root {
+    --primary-color: #004aad;
+    --secondary-color: #00be62;
+    --accent-color: #fe5656;
+    --bg-color: #fefefe;
+    --text-color: #212529;
+    --card-bg: #ffffff;
+    --card-border: rgba(0,0,0,0.08);
+    --card-shadow: rgba(0,0,0,0.05);
+    --header-shadow: rgba(0,0,0,0.15);
+    --hover-shadow: rgba(0,0,0,0.1);
+}
+
+[data-theme="dark"] {
+    --primary-color: #00a0ff;
+    --secondary-color: #00e070;
+    --accent-color: #ff6b6b;
+    --bg-color: #121212;
+    --text-color: #e0e0e0;
+    --card-bg: #1e1e1e; 
+    --card-border: rgba(255,255,255,0.05);
+    --card-shadow: rgba(0,0,0,0.2);
+    --header-shadow: rgba(0,0,0,0.3);
+    --hover-shadow: rgba(0,0,0,0.3);
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+    padding-top: 56px; /* Spazio per il navbar fisso */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+.navbar {
+    background-color: var(--primary-color);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    box-shadow: 0 2px 15px var(--header-shadow);
+}
+
+.navbar-brand, .nav-link {
+    color: var(--bg-color) !important;
+}
+
+.nav-link {
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    margin: 0 2px;
+    transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+    color: var(--accent-color) !important;
+    background-color: rgba(255,255,255,0.1);
+}
+
+.nav-link.active {
+    background-color: rgba(255,255,255,0.15);
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #003d91;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+}
+
+.btn-secondary {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+.btn-accent {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: white;
+}
+
+.btn-accent:hover {
+    background-color: #e04848;
+    color: white;
+}
+
+.banner-container {
+    margin-bottom: 40px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 5px 20px var(--card-shadow);
+}
+
+.banner-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 10s ease;
+}
+
+.banner-container:hover .banner-image {
+    transform: scale(1.05);
+}
+
+.subscribe-button-container {
+    position: absolute;
+    bottom: 40px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    z-index: 10;
+}
+
+.subscribe-button {
+    background-color: var(--accent-color);
+    color: white;
+    text-transform: uppercase;
+    font-weight: bold;
+    padding: 8px 22px;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    display: inline-block;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.subscribe-button:hover {
+    background-color: #ff4141;
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+    color: white;
+}
+
+.magazine-section {
+    padding: 60px 0;
+    background-color: var(--bg-color);
+}
+
+.magazine-title {
+    color: var(--primary-color);
+    font-size: 2.8rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    position: relative;
+    display: inline-block;
+}
+
+.magazine-title:after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 60px;
+    height: 4px;
+    background-color: var(--accent-color);
+    border-radius: 2px;
+}
+
+.card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    margin-bottom: 25px;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    box-shadow: 0 5px 15px var(--card-shadow);
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px var(--hover-shadow);
+}
+
+.card-img-top {
+    transition: all 1s ease;
+}
+
+.card:hover .card-img-top {
+    transform: scale(1.05);
+}
+
+.card-title {
+    color: var(--primary-color);
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.card-header {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.video-wrapper {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+    overflow: hidden;
+    max-width: 100%;
+    margin-bottom: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px var(--card-shadow);
+}
+
+.video-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+}
+
+.discover-section {
+    padding: 70px 0;
+    background-color: var(--bg-color);
+    text-align: center;
+    box-shadow: 0 -5px 15px var(--card-shadow), 0 5px 15px var(--card-shadow);
+}
+
+.section-title {
+    color: var(--primary-color);
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.feature-card-link {
+    display: block;
+    text-decoration: none;
+    color: white;
+}
+
+.feature-card {
+    height: 200px;
+    background-color: var(--secondary-color);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 1.3rem;
+    transition: all 0.4s ease;
+    cursor: pointer;
+    box-shadow: 0 8px 20px var(--card-shadow);
+    overflow: hidden;
+    position: relative;
+}
+
+.feature-card:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.2) 100%);
+    z-index: 1;
+}
+
+.feature-card-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 20px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.feature-logo {
+    max-width: 70%;
+    height: auto;
+    margin-bottom: 15px;
+    transition: all 0.3s ease;
+}
+
+.feature-card h3 {
+    margin-top: auto;
+    margin-bottom: 10px;
+}
+
+.feature-card:hover {
+    transform: translateY(-10px) scale(1.03);
+    box-shadow: 0 15px 30px var(--hover-shadow);
+}
+
+.feature-card:hover .feature-logo {
+    transform: scale(1.1);
+}
+
+.donate-section {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 70px 0;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 -10px 30px var(--card-shadow);
+}
+
+.donate-text {
+    font-size: 1.4rem;
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+    transform: rotate(-5deg);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.italian-flag {
+    display: flex;
+    max-width: 320px;
+    height: 120px;
+    margin: 30px auto;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.flag-stripe {
+    flex: 1;
+    height: 100%;
+}
+
+.flag-red {
+    background-color: #F44336;
+}
+
+.flag-white {
+    background-color: white;
+}
+
+.flag-green {
+    background-color: #4CAF50;
+}
+
+.donate-button {
+    background: linear-gradient(to right, var(--accent-color), #a770ef);
+    color: white;
+    padding: 14px 50px;
+    border-radius: 30px;
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+    margin-top: -25px;
+    position: relative;
+    z-index: 2;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+
+.donate-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+    color: white;
+}
+
+.footer {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 50px 0 30px;
+    margin-top: 0;
+}
+
+.footer h5 {
+    font-weight: 600;
+    margin-bottom: 20px;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 8px;
+}
+
+.footer h5:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 40px;
+    height: 3px;
+    background-color: var(--accent-color);
+    border-radius: 1.5px;
+}
+
+.footer a {
+    transition: all 0.2s ease;
+}
+
+.footer a:hover {
+    opacity: 0.8;
+    transform: translateX(3px);
+}
+
+.social-icons a {
+    margin-right: 15px;
+    font-size: 1.5rem;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.social-icons a:hover {
+    transform: translateY(-3px);
+    opacity: 1;
+}
+
+.theme-switch-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.theme-switch {
+    display: inline-block;
+    height: 34px;
+    position: relative;
+    width: 60px;
+}
+
+.theme-switch input {
+    display: none;
+}
+
+.slider {
+    background-color: var(--bg-color);
+    bottom: 0;
+    cursor: pointer;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: .4s;
+    border: 1px solid var(--text-color);
+}
+
+.slider:before {
+    background-color: var(--accent-color);
+    bottom: 4px;
+    content: "";
+    height: 24px;
+    left: 4px;
+    position: absolute;
+    transition: .4s;
+    width: 24px;
+}
+
+input:checked + .slider {
+    background-color: var(--bg-color);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+    background-color: var(--primary-color);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* Skip to content link - accessibility */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--accent-color);
+    color: white;
+    padding: 8px;
+    z-index: 1001;
+    transition: top 0.3s;
+}
+
+.skip-link:focus {
+    top: 0;
+}
+
+/* Animazioni */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* Responsive */
+@media (max-width: 991px) {
+    .navbar-nav {
+        padding: 15px 0;
+    }
+    
+    .nav-link {
+        padding: 10px;
+        margin: 5px 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .subscribe-button-container {
+        bottom: 20px;
+    }
+    
+    .subscribe-button {
+        font-size: 0.9rem;
+        padding: 6px 16px;
+    }
+    
+    .magazine-title {
+        font-size: 2.2rem;
+    }
+    
+    .feature-card {
+        height: 150px;
+    }
+    
+    .donate-text {
+        transform: none;
+        font-size: 1.2rem;
+    }
+    
+    .donate-button {
+        padding: 12px 30px;
+        font-size: 1.3rem;
+    }
+}
+```
+
+## 5. Script JavaScript per il tema - theme.js
+```javascript
+document.addEventListener('DOMContentLoaded', function() {
+    // Toggle dark mode
+    const toggleSwitch = document.querySelector('#checkbox');
+    const currentTheme = localStorage.getItem('theme');
+
+    if (currentTheme) {
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        if (currentTheme === 'dark') {
+            toggleSwitch.checked = true;
+        }
+    }
+
+    function switchTheme(e) {
+        if (e.target.checked) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('theme', 'dark');
+        } else {
+            document.documentElement.setAttribute('data-theme', 'light');
+            localStorage.setItem('theme', 'light');
+        }    
+    }
+
+    if (toggleSwitch) {
+        toggleSwitch.addEventListener('change', switchTheme, false);
+    }
+
+    // Gestione della precarica delle immagini per migliorare le prestazioni
+    const preloadImages = document.querySelectorAll('img[data-src]');
+    const preloadImagesArray = Array.from(preloadImages);
+    
+    preloadImagesArray.forEach(img => {
+        const image = new Image();
+        image.src = img.getAttribute('data-src');
+        image.onload = () => {
+            img.src = img.getAttribute('data-src');
+            img.removeAttribute('data-src');
+        };
+    });
+
+    // Animazioni al caricamento
+    const sections = document.querySelectorAll('.fade-in');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '0';
+                setTimeout(() => {
+                    entry.target.style.animation = 'fadeIn 0.8s ease-out forwards';
+                }, 100);
+            }
+        });
+    }, { threshold: 0.1 });
+    
+    sections.forEach(section => {
+        section.style.opacity = '0';
+        observer.observe(section);
+    });
+
+    // Correzione URL YouTube
+    const videoFrames = document.querySelectorAll('.video-wrapper iframe');
+    videoFrames.forEach(frame => {
+        if (frame.src.includes('watch?v=')) {
+            frame.src = frame.src.replace('watch?v=', 'embed/');
+        }
+    });
+});
+```
+
+## 6. Struttura del modular template per la homepage - modular.html.twig
+```twig
+{% extends 'partials/base.html.twig' %}
+
+{% block content %}
+    <!-- Banner Image -->
+    <div class="banner-container">
+        <img src="{{ url('theme://images/banner-liberta-digitale.jpg') }}" alt="Libertà Digitale - Lorenzo DM" class="banner-image">
+        <div class="subscribe-button-container">
+            <a href

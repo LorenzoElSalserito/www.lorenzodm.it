@@ -1,0 +1,278 @@
+{# File: user/themes/lorenzodm/templates/donazioni.html.twig #}
+{% extends 'partials/base.html.twig' %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <h1 class="page-title">{{ page.title }}</h1>
+        {% if page.header.subtitle %}
+            <p class="page-subtitle">{{ page.header.subtitle }}</p>
+        {% endif %}
+    </div>
+</div>
+
+<div class="container my-5 fade-in">
+    <div class="row">
+        <div class="col-lg-8 mx-auto text-center">
+            {% if page.content %}
+                <div class="page-content mb-5">
+                    {{ page.content|raw }}
+                </div>
+            {% endif %}
+            
+            {# Sezione principale donazioni - simile alla home page #}
+            <div class="donate-section-card mb-5">
+                <div class="donate-text my-4">
+                    Se ti piace il mio lavoro, offrimi pure un caffè, per Me è TANTISSIMO! GRAZIE!
+                </div>
+                
+                <div class="italian-flag large-flag">
+                    <div class="flag-stripe flag-green"></div>
+                    <div class="flag-stripe flag-white"></div>
+                    <div class="flag-stripe flag-red"></div>
+                </div>
+                
+                <div class="text-center mt-4">
+                    <a href="https://www.paypal.me/lorenzodemarco92" 
+                       target="_blank" 
+                       rel="noopener"
+                       class="donate-button fixed-text" 
+                       style="border: 2px solid rgba(255,255,255,0.6);">
+                        Dona Ora
+                    </a>
+                </div>
+            </div>
+            
+            <div class="donation-methods mt-5 pt-3">
+                <h2 class="section-title">Metodi di pagamento</h2>
+                
+                <div class="row justify-content-center">
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card payment-method-card h-100">
+                            <div class="card-body text-center">
+                                <div class="payment-icon mb-3">
+                                    <i class="fab fa-paypal fa-4x"></i>
+                                </div>
+                                <h3 class="h5">PayPal</h3>
+                                <p class="mb-4">Sostieni il progetto lorenzodm.it con una donazione sicura tramite PayPal</p>
+                                <a href="https://www.paypal.me/lorenzodemarco92" class="btn btn-primary fixed-text"> Dona Ora </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card payment-method-card h-100">
+                            <div class="card-body text-center">
+                                <div class="payment-icon mb-3">
+                                    <i class="fas fa-credit-card fa-4x"></i>
+                                </div>
+                                <h3 class="h5">Bonifico Bancario</h3>
+                                <p class="mb-4">Preferisci fare un bonifico? Contattami per ricevere le coordinate bancarie</p>
+                                <a href="{{ base_url }}/contatti" class="btn btn-primary fixed-text">Richiedi info</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card payment-method-card h-100">
+                            <div class="card-body text-center">
+                                <div class="payment-icon mb-3">
+                                    <i class="fas fa-hand-holding-heart fa-4x"></i>
+                                </div>
+                                <h3 class="h5">Altre modalità</h3>
+                                <p class="mb-4">Hai altre idee per supportare il progetto? Sono aperto a collaborazioni e proposte</p>
+                                <a href="{{ base_url }}/contatti" class="btn btn-primary fixed-text">Contattami</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="donation-faq mt-5 pt-3">
+                <h2 class="section-title">Perché donare?</h2>
+                
+                <div class="card donation-faq-card mt-4">
+                    <div class="card-body">
+                        <p class="mb-3">Le tue donazioni sono fondamentali per:</p>
+                        <div class="row text-start">
+                            <div class="col-md-6">
+                                <ul class="donation-reasons">
+                                    <li><i class="fas fa-server me-2"></i> Mantenere attivo il sito lorenzodm.it</li>
+                                    <li><i class="fas fa-pen-fancy me-2"></i> Creare nuovi contenuti di qualità</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <ul class="donation-reasons">
+                                    <li><i class="fas fa-laptop-code me-2"></i> Sviluppare progetti a sostegno del software libero</li>
+                                    <li><i class="fas fa-bullhorn me-2"></i> Continuare la divulgazione sulla libertà digitale</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="supporters-section mt-5 pt-4 border-top">
+                <h2 class="section-title">Grazie ai sostenitori</h2>
+                
+                <p class="lead mb-4">Un ringraziamento speciale a tutti coloro che hanno contribuito alla crescita di lorenzodm.it</p>
+                
+                {% if page.header.supporters %}
+                    <div class="row justify-content-center">
+                        {% for supporter in page.header.supporters %}
+                            <div class="col-md-4 mb-4">
+                                <div class="card supporter-card">
+                                    <div class="card-body">
+                                        <h3 class="h5">{{ supporter.name }}</h3>
+                                        {% if supporter.date %}
+                                            <p class="text-muted mb-0 small">{{ supporter.date }}</p>
+                                        {% endif %}
+                                        {% if supporter.message %}
+                                            <p class="mt-2"><em>"{{ supporter.message }}"</em></p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="alert alert-info">
+                        <p class="mb-0">Sii il primo a supportare il progetto e a comparire in questa sezione!</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Stili specifici per la pagina delle donazioni */
+.donate-section-card {
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 15px;
+    padding: 40px 30px;
+    box-shadow: 0 10px 30px var(--card-shadow);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.donate-section-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px var(--hover-shadow);
+}
+
+.donate-text {
+    font-size: 1.6rem;
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 20px;
+    font-weight: 600;
+    line-height: 1.4;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.large-flag {
+    max-width: 400px;
+    height: 150px;
+    margin: 30px auto;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    border-radius: 8px;
+}
+
+.payment-method-card {
+    transition: all 0.3s ease;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--card-border);
+    box-shadow: 0 5px 15px var(--card-shadow);
+}
+
+.payment-method-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px var(--hover-shadow);
+}
+
+.payment-icon {
+    color: var(--primary-color);
+    transition: all 0.3s ease;
+}
+
+.payment-method-card:hover .payment-icon {
+    transform: scale(1.1);
+}
+
+.supporter-card {
+    border-radius: 10px;
+    box-shadow: 0 5px 15px var(--card-shadow);
+    transition: all 0.3s ease;
+}
+
+.supporter-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px var(--hover-shadow);
+}
+
+.donation-faq-card {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    border-radius: 15px;
+    box-shadow: 0 8px 25px var(--card-shadow);
+    border-left: 5px solid var(--accent-color);
+}
+
+.donation-reasons li {
+    margin-bottom: 12px;
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.donation-reasons li i {
+    color: var(--accent-color);
+}
+
+.section-title {
+    color: var(--primary-color);
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    position: relative;
+    display: inline-block;
+}
+
+.section-title:after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 4px;
+    background-color: var(--accent-color);
+    border-radius: 2px;
+}
+</style>
+
+{# Schema.org markup per SEO #}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Donazioni - lorenzodm.it",
+    "description": "Supporta lorenzodm.it e i progetti sulla libertà digitale e il software libero con una donazione",
+    "url": "{{ page.url(true, true) }}",
+    "mainEntity": {
+        "@type": "Organization",
+        "name": "lorenzodm.it",
+        "url": "{{ base_url_absolute }}",
+        "logo": "{{ url('theme://images/lorenzodm-logo.png')|absolute_url }}",
+        "description": "Divulgazione su libertà digitale, software libero e tecnologia open source"
+    },
+    "speakable": {
+        "@type": "SpeakableSpecification",
+        "cssSelector": [".page-title", ".page-content", ".donate-text"]
+    }
+}
+</script>
+{% endblock %}

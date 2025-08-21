@@ -1,0 +1,170 @@
+{# File: user/themes/lorenzodm/templates/item.html.twig #}
+{% extends 'partials/base.html.twig' %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <article class="article" itemscope itemtype="https://schema.org/Article">
+                <header class="article-header">
+                    <h1 class="article-title" itemprop="headline">{{ page.title }}</h1>
+                    
+                    <div class="article-meta">
+                        {% if page.header.date %}
+                            <span class="article-date">
+                                <i class="far fa-calendar-alt me-1"></i> Pubblicato il: 
+                                <time datetime="{{ page.header.date|date("Y-m-d") }}" itemprop="datePublished">
+                                    {{ page.header.date|date("d/m/Y") }}
+                                </time>
+                            </span>
+                        {% endif %}
+                        
+                        {% if page.header.author %}
+                            <span class="article-author ms-3" itemprop="author" itemscope itemtype="https://schema.org/Person">
+                                <i class="far fa-user me-1"></i> Autore: 
+                                <span itemprop="name">{{ page.header.author }}</span>
+                            </span>
+                        {% endif %}
+                        
+                        {% if page.header.category %}
+                            <span class="article-category ms-3">
+                                <i class="far fa-folder me-1"></i> Categoria: 
+                                <a href="{{ base_url }}/category:{{ page.header.category }}">{{ page.header.category }}</a>
+                            </span>
+                        {% endif %}
+                    </div>
+                    
+                    {% if page.header.image %}
+                        <div class="article-featured-image mt-4">
+                            <img src="{{ url('theme://images/' ~ page.header.image) }}" 
+                                 alt="{{ page.title }}" 
+                                 class="img-fluid rounded shadow-sm"
+                                 itemprop="image"
+                                 loading="lazy">
+                        </div>
+                    {% endif %}
+                </header>
+                
+                <div class="article-content mt-4" itemprop="articleBody">
+                    {{ page.content|raw }}
+                </div>
+                
+                <footer class="article-footer mt-5 pt-4 border-top">
+                    {% if page.taxonomy.tag %}
+                        <div class="article-tags mb-4">
+                            <span class="fw-bold">Tags:</span>
+                            {% for tag in page.taxonomy.tag %}
+                                <a href="{{ base_url }}/tag:{{ tag }}" class="badge bg-secondary text-decoration-none me-1">{{ tag }}</a>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    
+                    <div class="article-sharing mt-4">
+                        <h5>Condividi questo articolo:</h5>
+                        <div class="d-flex gap-3 fs-4">
+                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ page.url(true) }}" 
+                               target="_blank" rel="noopener" 
+                               class="text-primary" 
+                               aria-label="Condividi su Facebook">
+                                <i class="fab fa-facebook"></i>
+                            </a>
+                            <a href="https://twitter.com/intent/tweet?url={{ page.url(true) }}&text={{ page.title|url_encode }}" 
+                               target="_blank" rel="noopener" 
+                               class="text-info" 
+                               aria-label="Condividi su Twitter">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="https://t.me/share/url?url={{ page.url(true) }}&text={{ page.title|url_encode }}" 
+                               target="_blank" rel="noopener" 
+                               class="text-info" 
+                               aria-label="Condividi su Telegram">
+                                <i class="fab fa-telegram"></i>
+                            </a>
+                            <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ page.url(true) }}&title={{ page.title|url_encode }}" 
+                               target="_blank" rel="noopener" 
+                               class="text-primary" 
+                               aria-label="Condividi su LinkedIn">
+                                <i class="fab fa-linkedin"></i>
+                            </a>
+                        </div>
+                    </div>
+                </footer>
+            </article>
+            
+            {% if config.plugins.comments.enabled %}
+                {% include 'partials/comments.html.twig' %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="container mb-5">
+    <div class="row">
+        <div class="col-12">
+            <h3 class="mb-4">Articoli correlati</h3>
+        </div>
+        
+        {% set related_articles = page.collection({'items': {'@taxonomy.tag': page.taxonomy.tag}, 'limit': 3, 'order': {'by': 'date', 'dir': 'desc'}}) %}
+        
+        {% if related_articles|length > 0 %}
+            {% for article in related_articles if article.path != page.path %}
+                <div class="col-md-4 mb-4">
+                    <article class="card content-card h-100">
+                        {% if article.header.image %}
+                            <img loading="lazy" src="{{ url('theme://images/' ~ article.header.image) }}" class="card-img-top" alt="{{ article.title }}">
+                        {% else %}
+                            <img loading="lazy" src="{{ url('theme://images/default-article.jpg') }}" class="card-img-top" alt="{{ article.title }}">
+                        {% endif %}
+                        
+                        <div class="card-body d-flex flex-column">
+                            <div class="card-header-custom">
+                                <h3 class="card-title h5">{{ article.title }}</h3>
+                            </div>
+                            
+                            <p class="card-text small flex-grow-1">{{ article.summary|striptags|truncate(120) }}</p>
+                            <a href="{{ article.url }}" class="btn btn-primary btn-sm mt-auto">Leggi di più</a>
+                        </div>
+                    </article>
+                </div>
+            {% else %}
+                <div class="col-12">
+                    <p>Nessun articolo correlato disponibile.</p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12">
+                <p>Nessun articolo correlato disponibile.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+{# Microdata schema.org per SEO #}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "{{ page.url(true, true) }}"
+    },
+    "headline": "{{ page.title }}",
+    "description": "{{ page.header.description|default(page.summary|striptags) }}",
+    "image": "{{ (page.header.image ? url('theme://images/' ~ page.header.image)|absolute_url : url('theme://images/default-article.jpg')|absolute_url) }}",
+    "datePublished": "{{ page.header.date|default('now')|date('c') }}",
+    "dateModified": "{{ page.header.modified|default(page.header.date|default('now'))|date('c') }}",
+    "author": {
+        "@type": "Person",
+        "name": "{{ page.header.author|default('Lorenzo DM') }}"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "lorenzodm.it",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "{{ url('theme://images/lorenzodm-logo.png')|absolute_url }}"
+        }
+    }
+}
+</script>
+{% endblock %}
