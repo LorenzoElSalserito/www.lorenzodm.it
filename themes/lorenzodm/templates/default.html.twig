@@ -2,11 +2,26 @@
 {% extends 'partials/base.html.twig' %}
 
 {% block content %}
-    {# Banner principale #}
-    <div class="banner-container">
-        <img src="{{ url('theme://images/Subscribe.png') }}" alt="Libertà Digitale - Lorenzo DM" class="banner-image">
+    {# Banner principale ottimizzato per mobile #}
+    <div class="banner-container" role="banner" aria-label="Banner principale lorenzodm.it">
+        <img src="{{ url('theme://images/Subscribe.png') }}" 
+            alt="Libertà Digitale - Lorenzo DM - Iscriviti al canale YouTube per contenuti su software libero e privacy" 
+            class="banner-image"
+            loading="eager"
+            decoding="async"
+            fetchpriority="high"
+            width="1920" 
+            height="1080">
+        
         <div class="subscribe-button-container">
-            <a href="https://www.youtube.com/@LorenzoDM/?sub_confirmation=1" target="_blank" class="subscribe-button" rel="noopener">ISCRIVITI</a>
+            <a href="https://www.youtube.com/@LorenzoDM/?sub_confirmation=1" 
+            target="_blank" 
+            class="subscribe-button" 
+            rel="noopener noreferrer"
+            aria-label="Iscriviti al canale YouTube di Lorenzo DM per contenuti su libertà digitale e software libero"
+            title="Iscriviti al canale YouTube - Nuovi video ogni settimana">
+                <span aria-hidden="true"></span> ISCRIVITI
+            </a>
         </div>
     </div>
 
